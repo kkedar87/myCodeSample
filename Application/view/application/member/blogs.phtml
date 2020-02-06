@@ -1,0 +1,41 @@
+<div class="user_portfolio_section">
+	<?php
+	$memeber_name = ($member->display_name == '')?$member->username:$member->display_name;
+	?>
+	
+    <div class="user_profile_section">
+		<h2><?php echo $this->escapeHtml($memeber_name); ?></h2>
+		<div class="ups_leftside">
+			<?php 
+				echo $this->partial('application/partials/portfolio_left_column.phtml', 
+					array(
+						'member' 				=> $member,
+        				'user_articles_count' 	=> $user_articles_count,
+						'user_blogs_count'		=> $user_blogs_count,
+						'user_comments_count'	=> $user_comments_count,
+						'followed_status'		=> $followed_status,
+						'followerCount'			=> $followerCount,
+						'followedCount'			=> $followedCount,
+						)
+				); 
+			?>
+		</div>
+		<div class="ups_rightside">
+			<?php 
+				echo $this->partial('application/partials/articles_listing_with_cats.phtml', 
+					array(
+						'paginator' => $paginator,
+	    				'blogs' 	=> $blogs,
+	    				'categories'=> $categories,
+	    				'cat'		=> $cat,
+	    				'sub_cat'	=> $sub_cat,
+	    				'user'		=> $user,
+						'user_articles_count' 	=> $user_articles_count,
+						'authors' 				=> $authors,
+						'authors_usernames' 	=> $authors_usernames,
+						)
+				); 
+			?>
+		</div>
+	</div>
+</div>

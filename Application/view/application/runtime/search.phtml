@@ -1,0 +1,39 @@
+<?php
+if(count($this->search_options) > 0)
+{
+	?>
+	<ul>
+		<?php 
+		foreach($this->search_options as $search_option_label => $search_option)
+		{
+			?>
+			<li>
+				<label><?php echo $search_option_label;?></label>
+				<ul>
+					<?php 
+					$count =  0;
+					foreach($search_option as $option)
+					{
+						if($count++ >= 5)
+							break;
+						?>
+						<li>
+							<a href="<?php echo $option['link']; ?>" style="display:block;width: 100%;">
+								<?php echo $this->getExcerpt($option['label'], 39)?>
+							</a>
+						</li>
+						<?php 
+					}
+					?>
+				</ul>
+			</li>
+			<?php 
+		}
+		?>
+	</ul>
+	<?php
+}
+else
+{
+	
+}

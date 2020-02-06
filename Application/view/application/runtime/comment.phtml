@@ -1,0 +1,30 @@
+<div>
+	<div>
+		<label>By: <?php echo $author_name?></label>
+		<div class="comment_date">
+			<strong><i class="fa fa-comments"></i> Commented On: </strong>
+			<?php echo $comment_date;?>
+			&nbsp;|&nbsp;
+			<a href="javascript:void(0)" class="report_abuse_box_open" rel='<?php echo $comment_id?>'><i class="fa fa-file-text"></i> Report Abuse!</a>
+			&nbsp;|&nbsp;
+			<a href="javascript:void(0)" class="reply_box_open" rel='<?php echo $comment_id?>'><i class="fa fa-comments"></i> Reply!</a>
+			<div id="report_abuse_box_<?php echo $comment_id?>" class="reply_abuse_box">
+				<fieldset>
+					<textarea spellcheck="true" class="report_abuse" id="report_abuse_<?php echo $comment_id?>" name="report_abuse_<?php echo $comment_id?>" cols="" rows=""></textarea>
+				</fieldset>
+				<input class="next_step report_abuse_btn reply" type="button" name="report_abuse_btn_<?php echo $comment_id?>" id="report_abuse_btn_<?php echo $comment_id?>" value="Report" style="float: right; margin-right: 0px;" />
+			</div>
+		</div>
+	</div>
+	<div style="border: 1px solid #efefef; margin-bottom: 20px; background: none repeat scroll 0 0 #fafafa; float: left; width: 100%;">
+		<p class="greyText comment_p" style="margin: 0px; margin-bottom: 15px;"><?php echo nl2br($comment);?></p>
+		<div class="reply_box" id="reply_data_box_<?php echo $comment_id?>"></div>
+	</div>
+	
+	<div id="reply_box_<?php echo $comment_id?>" class="reply_abuse_box_reply">
+		<fieldset>
+			<textarea spellcheck="true" class="reply" id="reply_<?php echo $comment_id?>" name="reply_<?php echo $comment_id?>" cols="" rows=""></textarea>
+		</fieldset>
+		<input class="next_step reply_btn" type="button" name="reply_btn_<?php echo $comment_id?>" id="reply_btn_<?php echo $comment_id?>" value="Reply" style="float: right; margin-right: 0px;"/>
+	</div>
+</div>

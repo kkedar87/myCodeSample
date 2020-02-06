@@ -1,0 +1,31 @@
+<div class="page_heading_div">
+	<div style="margin: 10px">
+		<?php
+		$title = 'Delete Member: '.$member->first_name.' '.$member->last_name.' ('.$member->email.')';
+		$this->headTitle($title);
+		?>
+		
+		<h1><?php echo 'Delete Member'; ?></h1>
+	
+		<p style="padding-left: 50px">
+			<strong>Are you sure that you want to delete the following member?</strong>
+			<br>
+			<span class="clr_orange"><?php echo $this->escapeHtml($member->first_name.' '.$member->last_name.' ('.$member->email.')'); ?> </span>
+			<br />
+			<img src="<?php echo MEMBER_IMAGE_URL.$member->image; ?>" height="100px"/>
+		</p>
+		<?php
+		$url = $this->url('member', array(
+		    'action' => 'delete',
+		    'user_id'     => $this->user_id,
+		));
+		?>
+		<form action="<?php echo $url; ?>" method="post">
+			<div style="margin: 0px 0px 20px 20px">
+			    <input type="hidden" name="user_id" value="<?php echo (int) $member->user_id; ?>" />
+			    <input type="submit" name="del" value="Yes" class="delete_save" />
+			    <input type="submit" name="del" value="No" class="delete_save" />
+			</div>
+		</form>
+	</div>
+</div>

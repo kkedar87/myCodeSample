@@ -1,0 +1,32 @@
+<div class="thankyou_wrapper">
+	<div class="thankyou_page">
+		<div class="thankyou_body_section" id="re_verify">
+		
+			<?php 
+			if($email_id_not_registered)
+			{
+				?>
+					<div class="form_inner_div">This Email Address is not registered. Click on the button below to register.</div>
+					<div class="ddBox"><a id="verify_login" class="a_button" href="<?php echo $this->url('zfcuser/register');?>" >Register</a></div>
+				<?php
+				
+			}
+			elseif($mail_sent)
+			{
+				?>
+					<div class="form_inner_div">Email with instructions to reset password has been sent to your email id. Kindly check your email...</div>
+				<?php
+			}
+			else
+			{
+				?>
+				<form method="post">
+					<input name="email" placeholder="Email Address" required id="email" />
+					<input type="submit" value="Send Reset Pass Request" />
+				</form>
+				<?php 
+			}
+			?>
+		</div>
+	</div>
+</div>

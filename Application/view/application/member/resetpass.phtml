@@ -1,0 +1,33 @@
+<div class="thankyou_wrapper">
+	<div class="thankyou_page">
+		<div class="thankyou_body_section" id="re_verify">
+			<?php 
+			if($link_expired || $invalid_code)
+			{
+				?>
+				<div class="form_inner_div">This reset password link seems expired. Please click on the following button to send reset password request again.</div>
+				<a class="a_button" href="<?php echo HOME_URL;?>user/forgotpass/resetpass" >Reset Password</a>
+				<?php
+			}
+			elseif($pass_reset_succ)
+			{
+				?>
+				<div class="form_inner_div">Password has been changed successfully. Click on the button below to login.</div>
+				<div class="ddBox"><a class="a_button" href="<?php echo $this->url('zfcuser/login');?>" >Login</a></div>
+				<?php
+				
+			}
+			else
+			{
+				?>
+				<form method="post">
+					<input type="password" value="" id="new_pass" name="new_pass" class="" placeholder="New Password" autocomplete="off">
+                    <input type="password" value="" id="conf_pass" name="conf_pass" class="" placeholder="Confirm Password" autocomplete="off">
+					<input type="submit" value="Reset Pass" />
+				</form>
+				<?php 
+			}
+			?>
+		</div>
+	</div>
+</div>

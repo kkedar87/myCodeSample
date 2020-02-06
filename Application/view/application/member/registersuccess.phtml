@@ -1,0 +1,21 @@
+<div class="thankyou_wrapper">
+<div class="thankyou_page">
+<div class="thankyou_body_section">
+	<?php
+		$title = 'Thanks for Registration.';
+		$this->headTitle($title);
+	?>
+	<h1><?php echo $this->escapeHtml($title); ?></h1>
+	<div class="form_inner_div">
+		<?php 
+		if($mail_sent)
+		{
+			?>
+			A verification link has beens sent to your email. Please check your email Inbox...
+			<?php 
+		}
+		?> 
+	</div>
+   </div> 
+</div>
+</div>

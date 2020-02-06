@@ -1,0 +1,80 @@
+<div class="articles_listing">
+	<?php /*?><div class="tab_heading">Articles</div><?php */?>
+	<div class="row-fluid padding-allsides">
+		<?php
+		if(isset($category) && $category)
+		{
+			?>
+			<div class="tab_heading">Articles associated with <?php echo ucwords($category->name)?></div>
+			<?php
+		}
+		else
+		{
+			?>
+			<div class="tab_heading">Articles</div>
+			<?php
+		}
+		?>
+		<?php 
+		$count_article = 0;
+		foreach ($this->paginator as $article)
+		{
+			$past_time_text = $this->getPastTimeFormat($article->date_created);
+			$author 				= $authors[$article->author_id];
+			$author_username 		= $authors_usernames[$article->author_id];
+			$author_articles_count 	= isset($user_articles_count[$article->author_id])?$user_articles_count[$article->author_id]:$user_articles_count;
+			
+			if($count_article % 2 == 0 && $count_article != 0)
+			{
+				?>
+				</div><div class="row-fluid padding-allsides">
+				<?php
+			}
+			
+			$user_image = ($article->user_image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$article->user_image;
+			$count_article++;
+			?>
+			<div class="span12">
+	       <?php /*?> 	<div class="month left">
+	            	<span><?php echo date('M', strtotime($article->date_created));?></span>
+	                <span><?php echo date('Y', strtotime($article->date_created));?></span>
+	            </div><?php */?>
+	            <div class="month_description left">
+                	<!-- <div class="month_description_img">
+		            	<a href="<?php echo HOME_URL.'user/'.$article->username;?>">
+		            		<img src="<?php echo $user_image?>" alt="user_image">
+		            	</a>
+                    </div> -->
+                    <div class="month_description_content" style="width: 100%">
+		            	<h2><span style="color: #333"><?php echo (isset($cur_page_no)?(($cur_page_no-1)*RECORDS_PER_PAGE + $count_article):$count_article); ?>. </span><a href="<?php echo HOME_URL.'article/'.$article->alias;?>"><?php echo stripslashes(substr(strip_tags($article->title), 0, 62).((strlen($article->title)>62)?"...":''));?></a></h2>
+	                    <p><?php echo stripslashes(substr(strip_tags($article->description), 0, 400).((strlen($article->description)>400)?"...":''));?></p>
+		                <div class="monthdescription_listing">
+		                	<?php echo $this->getCategoryLinks($article);?>
+							<span><i class="fa fa-clock-o"></i> &nbsp;<?php echo $past_time_text;?> ago</span>
+							<span><i class="fa fa-user"></i> &nbsp; Author: <a href="<?php echo HOME_URL.'user/'.$author_username;?>"><?php echo $author?></a></span>
+		                </div>
+                    </div>
+	            </div>
+	        </div>
+	        <?php 
+		}
+		?>
+	</div>
+    <?php
+	// add at the end of the file after the table
+	echo $this->paginationControl(
+	// the paginator object
+	$this->paginator,
+    // the scrolling style
+    'sliding',
+    // the partial to use to render the control
+    array('application/partials/paginator.phtml', 'article'),
+	    // the route to link to when a user clicks a control link
+	    array(
+	    	'route' => 'frontarticles',
+			'action'=> 'all/',
+	    )
+	);
+	?>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,89 @@
+<div class="row layoutSecond">
+	<div class="col-lg-9">
+		<div class="whiteBG well descrpition ">
+			<h4>loren ipsum</h4>
+			<span class="article_date_user">22.07.2014 7:28 AM ET  | About : <a href="#">Coach</a>, <a href="#">Inc</a>. <a href="#">(COH.)</a> , Includes:<a href="#">HSBC</a></span>
+            <div class="article_summery">
+            <h3>Summery</h3>
+            <ul>
+            <li>&raquo; Loren ipsum</li>
+            <li>&raquo; Loren ipsum</li>
+            <li>&raquo; Loren ipsum</li>
+            </ul>
+            <P><a href="#">Coach</a>, <a href="#">Inc</a>. <a href="#">(COH.)</a> , Includes:<a href="#">HSBC</a></P>
+            <P><strong>Disclosure</strong> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard</P>
+            </div>
+		
+			<div class="article_tags"><p><strong>Tags: </strong>Loren, Loren, Loren, Loren</p></div>
+			<div class="article_bottom_links">
+				loren ipsum
+				&nbsp;|&nbsp;
+				<a href="#report_abuse"><i class="fa fa-file-text"></i> Report Abuse</a>
+				&nbsp;|&nbsp;
+				<a href=""><i class="fa fa-link"></i> Link</a>
+				&nbsp;|&nbsp;
+				<a href="#comments"><i class="fa fa-comments"></i> Comment!</a>
+			</div>
+	   </div>
+	   <div class="whiteBG well descrpition ">
+			<h3>Comments and discussion boards:</h3>
+			<?php
+			//foreach($paginator as $comment)
+			{
+				?>
+				<h4>
+					<?php //echo $authors[$comment->author_id]?> loren ipsum
+					<div class="comment_date">
+						<strong><i class="fa fa-comments"></i> Commented On: </strong>
+						<?php //echo date('M d, Y H:i', strtotime($article->date_created));?>
+                        22.07.2014
+					</div>
+				</h4>
+				<p class="greyText comment_p"><?php //echo $comment->comment;?>
+                dsfrrghmuygbxzfbg fgxchngf fhj fd</p>
+				<?php
+			}
+			?>
+	   </div>
+	</div><!--col-lg-8-->
+	
+	<div class="col-lg-3">
+	 	<div class="whiteBG well descrpition">
+       
+		 <div class="user_details">
+         <div class="user_details_img">
+		  		<?php 
+		  		//if($author->image != '')
+		  		{
+		  			?>
+		  			<img src="<?php //echo MEMBER_IMAGE_URL.$author->image;?>http://www.dev.8edge.co/front/img/user_image.png"/>
+		  			<?php
+		  		}
+		  		?>
+                </div>
+		  		<?php //echo $author->about;?>
+		  <h2>loren ipsum</h2>
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard</p>
+          <p><a href=""><i class="fa fa-user"></i> Profile</a>|<a href=""><i class="fa fa-envelope"></i> Send Message</a></p>
+          <p><a href=""><i class="fa fa-heart"></i> Following</a> <span>(38 followers)</span> </p>
+          </div>
+          
+          <div class="graf_view">
+          <h3>Primary 1</h3>
+          <div class="graf_view_box">
+          <img src="http://www.dev.8edge.co/front/img/graf.png"/>
+          </div>
+           </div>
+           
+            <div class="graf_view">
+          <h3>Primary 2</h3>
+          <div class="graf_view_box">
+          <img src="http://www.dev.8edge.co/front/img/graf.png"/>
+          </div>
+           </div>
+           
+           
+	 	</div>	
+	
+	 </div><!--row-->
+</div><!--row-->

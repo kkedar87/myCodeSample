@@ -1,0 +1,301 @@
+<div class="user_portfolio_section">
+	<?php
+	$memeber_name = ($member->display_name == '')?$member->username:$member->display_name;
+	$this->headTitle($memeber_name);
+	$user_id = '';
+	if($this->zfcUserIdentity())
+	{
+		$user_id = $this->zfcUserIdentity()->getId();
+	}
+	?>
+    <div class="user_profile_section">		
+		<div class="ups_leftside">
+			<?php 
+				echo $this->partial('application/partials/portfolio_left_column.phtml', 
+					array(
+						'member' 				=> $member,
+        				'user_articles_count' 	=> $user_articles_count,
+						'user_blogs_count' 		=> $user_blogs_count,
+						'user_comments_count'	=> $user_comments_count,
+						'followed_status'		=> $followed_status,
+						'followerCount'			=> $followerCount,
+						'followedCount'			=> $followedCount,
+						)
+				); 
+			?>
+		</div>
+		<div class="ups_rightside">
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>About</h5>
+					<?php 
+					if($member->user_id == $user_id)
+					{
+						?>
+						<div class="ups_edit"><a id="about_edit_box" href="#about_edit">edit &nbsp;</a></div> 
+						<div class="dnone">
+							<div id="about_edit">
+								<div class="edit_lightbox">
+                                
+									<form action="<?php echo $this->url('frontsearch', array('action' => 'edituser'));?>" method="post" id="about_edit_form">
+                                        <div class="edit_lightbox_left">
+                                        <div class="user_edit_lightbox_row">
+										<label for="sub">About</label>
+										<textarea id="about" name="about" class=""><?php echo $member->about; ?></textarea>
+										</div>
+                                        </div>
+                                         <div class="edit_lightbox_right">
+                                        
+                                        <div class="btn_section">
+										<input type="button" name="about_edit_save" id="about_edit_save" value="Save" />
+                                        </div>
+                                        
+                                        </div>
+									</form>
+									<div id="about_edit_return_msg"></div>
+								</div>
+							</div>
+						</div>
+						<?php
+					}
+					?>
+				</div>
+				<div class="content_desc">
+					<p id="about_content"><?php echo ($member->about == '')?'Currently, No infomation added about the user.':$member->about; ?></p>
+				</div>
+			</div>
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Company</h5>
+					<?php 
+					if($member->user_id == $user_id)
+					{
+						?>
+						<div class="ups_edit"><a id="company_edit_box" href="#company_edit">edit &nbsp;</a></div> 
+						<div class="dnone">
+							<div id="company_edit">
+								<div class="edit_lightbox">
+									<form action="<?php echo $this->url('frontsearch', array('action' => 'edituser'));?>" method="post" id="company_edit_form">
+                                       <div class="edit_lightbox_left">
+                                      <div class="user_edit_lightbox_row">
+										<label for="sub">Company Name</label>
+										<input type="text" value="<?php echo $member->company?>" id="company" name="company" class="">
+										</div>
+                                        <div class="user_edit_lightbox_row">
+										<label for="sub">Company Url</label>
+										<input type="text" value="<?php echo $member->company_url?>" id="company_url" name="company_url" class="">
+                                        </div>
+										<div class="user_edit_lightbox_row">
+										<label for="sub">Company Information</label>
+										<textarea id="company_info" name="company_info" class=""><?php echo $member->company_info; ?></textarea>
+										</div>
+                                        </div>
+                                         <div class="edit_lightbox_right">
+                                         
+                                         <div class="btn_section">
+										<input type="button" name="company_edit_btn" id="company_edit_btn" value="Save" />
+                                        </div>
+                                        
+                                        </div>
+									</form>
+									<div id="company_return_msg"></div>
+								</div>
+							</div>
+						</div>
+						<?php
+					}
+					?>
+				</div>
+				<?php 
+				//if($member->company != '')
+				{
+					?>
+					<div class="content_desc">
+						<h2>
+						<?php 
+						if($member->company_url == '')
+						{
+							echo $member->company; 
+						}
+						else
+						{
+							?>
+							<a href="<?php echo (strstr($member->company_url, 'http://')?'':'http://').$member->company_url; ?>" target="newTab" id="company_name_link"><?php echo $member->company?></a>
+							<?php
+						}
+						?>
+						</h2>
+						<p id="compnay_info_content"><?php echo $member->company_info; ?></p>
+					</div>
+					<?php
+				}
+				?>
+			</div>
+			</div>
+			
+			<div class="row-fluid">
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Articles</h5>
+					<?php 
+					if($member->user_id == $user_id)
+					{
+						?>
+						<div class="ups_edit"><a href="<?php echo HOME_URL?>articles/mine">edit &nbsp;</a></div> 
+						<?php
+					}
+					if($user_articles_count > 5)
+					{
+						?>
+						<a href="<?php echo HOME_URL . 'articles/all/user/'.$member->username; ?>" class="fright"> more &gt;&gt;</a>
+						<?php
+					}
+					?>
+				</div>
+				<div>
+					<ul>
+						<?php 
+						if(count($articles) <= 0)
+						{
+							?>
+							<li>No article posted by the user.</li>
+							<?php
+						}
+						$count = 0;
+						foreach($articles as $article)
+						{
+							$count++;
+							?>
+							<li>
+								<a href="<?php echo HOME_URL.'article/'.$article->alias;?>"><?php echo $count . ". " . $article->title;?></a>
+								<span style="float: right;"><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($article->date_created);?> ago</span>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Blog Posts</h5>
+					<?php 
+					if($member->user_id == $user_id)
+					{
+						?>
+						<div class="ups_edit"><a href="<?php echo HOME_URL?>blogs/mine">edit &nbsp;</a></div> 
+						<?php
+					}
+					if($user_blogs_count > 5)
+					{
+						?>
+						<a href="<?php echo HOME_URL . 'blogs/all/user/'.$member->username; ?>" class="fright"> more &gt;&gt;</a>
+						<?php
+					}
+					?>
+				</div>
+				<div>
+					<ul>
+						<?php 
+						if(count($blogs) <= 0)
+						{
+							?>
+							<li>No blog posted by the user.</li>
+							<?php
+						}
+						$count = 0;
+						foreach($blogs as $blog)
+						{
+							$count++;
+							?>
+							<li>
+								<a href="<?php echo HOME_URL.'article/'.$blog->alias;?>"><?php echo $count . ". " . $blog->title;?></a>
+								<span style="float: right;"><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($blog->date_created);?> ago</span>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Comments by <?php echo $this->userDisplayName($member);?></h5>
+					<?php 
+					if($user_comments_count > 5)
+					{
+						?>
+						<a href="<?php echo HOME_URL . 'user/usercomments/'.$member->username; ?>" class="fright"> more &gt;&gt;</a>
+						<?php
+					}
+					?>
+				</div>
+				<div>
+					<ul>
+						<?php 
+						if(count($user_comments) <= 0)
+						{
+							?>
+							<li>No Comment By User.</li>
+							<?php
+						}
+						$count = 0;
+						foreach($user_comments as $comment)
+						{
+							$count++;
+							?>
+							<li>
+								<a href="<?php echo HOME_URL.'article/'.$comment->article_alias;?><?php echo '#com'.$comment->comment_id;?>"><?php echo $count . ". " . $this->getExcerpt($comment->comment, 50);?></a>
+								 on <a href="<?php echo HOME_URL.'article/'.$comment->article_alias;?>"><?php echo $this->getExcerpt($comment->article_title, 50);?></a>
+								<span style="float: right;"><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($comment->date_created);?> ago</span>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Latest Comments on articles written by <?php echo $this->userDisplayName($member);?></h5>
+					<?php 
+					if(count($comments_on_user_articles) >= 5)
+					{
+						?>
+						<a href="<?php echo HOME_URL . 'user/articlecomments/'.$member->username; ?>" class="fright"> more &gt;&gt;</a>
+						<?php
+					}
+					?>
+				</div>
+				<div>
+					<ul>
+						<?php 
+						if(count($comments_on_user_articles) <= 0)
+						{
+							?>
+							<li>No Comment on user article.</li>
+							<?php
+						}
+						$count = 0;
+						foreach($comments_on_user_articles as $comment)
+						{
+							$memeber_name = ($comment->display_name == '')?$comment->username:$comment->display_name;
+							$count++;
+							?>
+							<li>
+								<a href="<?php echo HOME_URL.'user/'.$comment->username;?>"><?php echo $count . ". " . $memeber_name;?></a>
+								 on <a href="<?php echo HOME_URL.'article/'.$comment->article_alias;?>"><?php echo $this->getExcerpt($comment->article_title, 50);?></a>
+								<span style="float: right;"><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($comment->date_created);?> ago</span>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

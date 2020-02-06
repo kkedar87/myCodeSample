@@ -1,0 +1,95 @@
+<div class="user_profile_section">
+	<div class="article_listing_home">
+	
+	<div class="row-fluid">
+	<div class="span8">
+		<div class="tab_heading">Articles</div>
+		<div class="row-fluid padding-allsides">
+			
+			<?php 
+			//print_r($cat_article);
+			$count_article = 0;
+			//print_r($articles);
+			foreach ($articles as $article)
+			{
+				$past_time_text = $this->getPastTimeFormat($article->date_created);
+				
+				$author 				= $authors[$article->author_id];
+				$author_username 		= $authors_usernames[$article->author_id];
+				$author_articles_count 	= isset($user_articles_count[$article->author_id])?$user_articles_count[$article->author_id]:0;
+				
+				$count_article++;
+				?>
+				<div class="span12 <?php echo (($article->editors_choice)?'editors_choice':'')?>">
+					<div class="month_description">
+						<div class="month_description_img"> <?php echo $count_article; ?> </div>
+						<div class="month_description_content"> <a href="<?php echo HOME_URL.'article/'.$article->alias;?>"><?php echo $this->getExcerpt($article->title, 62);?></a>
+							<p><?php echo $this->getExcerpt($article->description, 120);?></p>
+							<div class="monthdescription_listing">
+								<?php echo $this->getCategoryLinks($article);?>
+								<span><i class="fa fa-clock-o"></i> &nbsp;<?php echo $past_time_text;?> ago</span>
+								<span><i class="fa fa-user"></i> &nbsp; Author: <a href="<?php echo HOME_URL.'user/'.$author_username;?>"><?php echo $author?></a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php 
+			}
+			?>
+		</div>
+		</div> <!--span6 end-->
+			<div class="span4">
+				<div class="topwriters">
+					<h4>Top Writers</h4>
+					<ul class="top-writers-listing">
+						<?php
+						foreach($top_authors as $top_author)
+						{
+							$user_image = ($top_author->image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$top_author->image;
+							?>
+							<li>
+								<a href="<?php echo HOME_URL.'user/'.$top_author->username;?>">
+									<div class="feature-img"><img src="<?php echo $user_image?>" class="img-thumbnail" /></div>
+									<div class="feture-description">
+										<span class="user-name "><label class="cpointer"><?php echo $top_author->username?></label></span>
+									</div>
+								</a>
+							</li>
+							<?php
+						}
+						?>					
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="readmore"><a href="<?php echo $this->url('frontarticles', array('action'=> 'all'));?>" class="yellow_btn">read more &raquo;</a></div>
+	</div>
+</div>
+
+<div class="clearfix"></div>
+<div class="container gap2"  style="padding:0px;">	
+	<div class="mustread_section">	
+		<div class="tab_heading">8edge Must Reads</div>	
+		<div class="row-fluid padding-allsides">
+			<?php 
+			$count_article = 0;
+			foreach ($must_read_articles as $curated)
+			{
+				$count_article++;
+				?>
+				<div class="span12">
+					<div class="month_description">
+						<div class="month_description_img"><?php echo $count_article; ?></div>
+						<div class="month_description_content"> 
+						<a href="<?php echo $curated->link;?>"><?php echo $curated->title;?></a>
+							<p><?php echo $curated->description;?></p>
+						</div>
+					</div>	
+				</div>
+				<?php 
+			}
+			?>
+		</div>
+		<div class="readmore"><a href="<?php echo $this->url('frontarticles', array('action'=> 'mustreads'));?>" class="yellow_btn">read more &raquo;</a></div>
+	</div>
+</div>

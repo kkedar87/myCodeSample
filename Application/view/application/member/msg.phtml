@@ -1,0 +1,136 @@
+<div class="page_heading_div two_column">
+	<div style="margin: 10px">
+		<?php
+		$router = 'frontmemeber';
+		$router_action 	= array('action' => 'msg', 'keywords' => $type);
+		$sort = $this->sort;
+		$order = $this->order;
+		$title = 'Messages';
+		$this->headTitle($title);
+		?>
+		<h1><?php echo $this->escapeHtml($title); ?><?php echo ($this->s != ''?' Searched for: <span class="clr_orange">'.$this->s.'</span>':'')?></h1>
+	    <form class="search_box" id="search_form">
+	    	<input type="text" name="s" id="s" placeholder="Search" value="<?php echo (isset($search_data['s']) && $search_data['s'] != '')?$search_data['s']:''?>" />
+	    	<span class="glyphicon glyphicon-search" onclick="$('#search_form').submit()" style="cursor:pointer"></span>
+	    </form>
+	
+		<table class="table">
+			<tr>
+			    <th class="w2">&nbsp;</th>
+			    <?php
+			    if($type == 'inbox')
+			    {
+			    	?>
+				    <th class="w20">From&nbsp;&nbsp;</th>
+			    	<?php
+			    }
+			    else if($type == 'sent')
+			    {
+			    	?>
+				    <th class="w20">To&nbsp;&nbsp;</th>
+			    	<?php
+			    }
+			    else
+		    	{
+		    		?>
+   				    <th class="w20">From&nbsp;&nbsp;</th>
+					<th class="w20">To&nbsp;&nbsp;</th>
+    			   	<?php
+    			}	
+			    ?>
+			    <th class="w15">Subject&nbsp;&nbsp;</th>
+			    <th class="w10">Read Status&nbsp;&nbsp;</th>
+			    <th class="w7">date&nbsp;&nbsp;</th>
+			    <th class="w5">View</th>
+			</tr>
+			<?php 
+			if(count($this->paginator) > 0)
+			{
+				$count = 0;
+				foreach ($this->paginator as $msg)
+				{
+					/* echo "<pre>";
+					print_r($msg);
+					exit; */
+					//$author_msgs_count = isset($member_msgs_count[$msg->author_id])?$member_msgs_count[$msg->author_id]:0;
+					?>
+					<tr class="<?php echo (!$msg->read && $type == 'inbox')?'unread':''; ?>" id="msg_row_<?php echo $msg->msg_id?>">
+					    <td><?php echo ++$count+(($pg-1)*RECORDS_PER_PAGE);?>.&nbsp;</td>
+					    <?php
+					    if($type == 'inbox')
+					    {
+					    	?>
+						    <td><?php echo $msg->from_username;?></td>
+					    	<?php
+					    }
+					    elseif($type == 'sent')
+					    {
+					    	?>
+						    <td><?php echo $msg->to_username;?></td>
+					    	<?php
+					    }
+					    else
+				    	{
+				    		?>
+							<td><?php echo $msg->from_username;?></td>
+					    	<td><?php echo $msg->to_username;?></td>
+		    			   	<?php
+		    			}	
+					    ?>
+					    <td>
+					    	<?php echo $this->escapeHtml($msg->sub);?>
+					    	<div class="dnone">
+					    		<div id="show_msg_<?php echo $msg->msg_id?>">
+                                
+					    			<div class="user_edit_lightbox_row"><p><strong>From:</strong><?php echo $msg->from_username;?></p></div>
+					    			<div class="user_edit_lightbox_row"><p><strong>To:</strong><?php echo $msg->to_username;?></p></div>
+					    			<div class="user_edit_lightbox_row"><p><strong>Subject:</strong><?php echo $msg->sub;?></p></div>
+					    			<div class="user_edit_lightbox_row"><p><strong>Date:</strong><?php echo $msg->date;?></p></div>
+					    			<div class="user_edit_lightbox_row msg_box"><p><?php echo $msg->msg;?></div>
+                                    
+					    		</div>
+					    	</div>
+					   	</td>
+					   	
+					    <td><?php echo $msg->read?'Read':'Unread'; ?></td>
+					    
+					   	<td><?php echo $this->escapeHtml($msg->date);?></td>
+					 	<td>
+					        <a href="#show_msg_<?php echo $msg->msg_id?>" class="view show_msg"><span class="glyphicon glyphicon-eye-open"></span></a>
+					    </td>
+					    
+					</tr>
+					<?php 
+				}
+			}
+			else
+			{
+				?>
+				<tr>
+				    <td colspan="100%" align="center"><h3>No Message Found</h3></td>
+				</tr>
+				<?php
+			}
+			?>
+		</table>
+		
+		<?php
+		// add at the end of the file after the table
+		echo $this->paginationControl(
+		// the paginator object
+		$this->paginator,
+	    // the scrolling style
+	    'sliding',
+	    // the partial to use to render the control
+	    array('application/partials/paginator.phtml', 'msg'),
+		    // the route to link to when a user clicks a control link
+		    array(
+		    	'route' => 'frontmemeber',
+				'action' => 'msg',
+				'keywords' => $type,
+				's'		=> $this->s,
+		    )
+		);
+		?>
+	</div>
+</div>

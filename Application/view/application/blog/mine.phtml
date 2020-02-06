@@ -1,0 +1,114 @@
+<?php 
+global $statuses;
+?>
+<div class="page_heading_div two_column">
+	<div style="margin: 10px">
+		<?php
+		$title = 'Blogs';
+		$this->headTitle($title);
+		?>
+		<h1><?php echo $this->escapeHtml($title); ?><?php echo ($this->s != ''?' Searched for: <span class="clr_orange">'.$this->s.'</span>':'')?></h1>
+		<p class="add_btn_on_list">
+	    	<a href="<?php echo $this->url('frontarticles', array('action'=>'add'));?>">Add New Blog</a>
+		</p>
+		<p class="add_btn_on_list">
+	    	<a href="<?php echo $this->url('frontblogs', array('action'=>'mine'));?>">Reset Filter</a>
+		</p>
+	    <form class="search_box" id="list_search_form">
+	    	<select name="status" id="status">
+	    		<option value="-1">Select Status</option>
+	    		<?php 
+	    		foreach ($statuses as $status => $status_label)
+	    		{
+	    			?>
+	    			<option value="<?php echo $status?>" <?php echo (isset($search_data['status']) && $search_data['status'] == $status)?'selected="selected"':''?>><?php echo $status_label?></option>
+	    			<?php
+	    		}?>
+	    	</select>
+	    	<input type="text" name="s" id="s" placeholder="Search with in your Blogs" value="<?php echo (isset($s) && $s != '')?$s:''?>" >
+	    	<span class="glyphicon glyphicon-search" onclick="$('#search_form').submit()" style="cursor:pointer"></span>
+	    </form>
+	    
+		<table class="table">
+			<tr>
+			    <th class="w2">&nbsp;</th>
+			    <th class="w25">Title</th>
+			    <th class="w30">Description</th>
+			    <th class="w15">Associated Tickers</th>
+			    <th class="w10">Status</th>
+			    <th class="w10">Created On</th>
+			    <th class="w7">Actions</th>
+			</tr>
+			<?php 
+			if($this->paginator)
+			{
+				$count = 0;
+				foreach ($this->paginator as $blog)
+				{
+					?>
+					<tr>
+					    <td><?php echo ++$count;?>.&nbsp;</td>
+					    <td class="clr_orange"><?php echo $this->escapeHtml(stripslashes($blog->title));?></td>
+					    <td>
+					    	<?php echo stripslashes(substr(strip_tags($blog->description), 0, LIST_DESCRIPTION_CONTENT_LENGTH).(strlen(strip_tags($blog->description))>LIST_DESCRIPTION_CONTENT_LENGTH?".....":''));?>
+					    </td>
+					    <td>
+					        <?php 
+							$tickers = explode(', ', trim($blog->tickers, ', '));
+							if(count($tickers) > 0)
+							{
+								$cnt = 0;
+								foreach($tickers as $ticker)
+								{
+									echo ($cnt == 0?'':', ');
+									?><a href="<?php echo HOME_URL.'symbol/'.$ticker;?>"><?php echo $ticker;?></a><?php
+									$cnt++;
+								}
+							}
+							?>
+						</td>
+						<td class="clr_orange">
+							<?php echo $statuses[$blog->status];?>
+						</td>
+						<td class="clr_orange">
+							<?php echo date('Y/m/d h:i A', strtotime($blog->date_created));?> 
+						</td>
+					    <td>
+					        <a href="<?php echo $this->url('frontarticles',
+					            array('action'=>'edit', 'article_id' => $blog->article_id));?>" class="edit"><span class="glyphicon glyphicon-edit"></span></a>
+					        <a href="<?php echo $this->url('frontarticle',
+					            array('alias' => $blog->alias));?>" target="_netTab" class="view"><span class="glyphicon glyphicon-eye-open"></span></a>
+					    </td>
+					</tr>
+					<?php 
+				}
+			}
+			else
+			{
+				?>
+				<tr>
+				    <td colspan="4" align="center"><h3>No Blog Found</h3></td>
+				</tr>
+				<?php
+			}
+			?>
+		</table>
+		
+		<?php
+		// add at the end of the file after the table
+		echo $this->paginationControl(
+		// the paginator object
+		$this->paginator,
+	    // the scrolling style
+	    'sliding',
+	    // the partial to use to render the control
+	    array('application/partials/paginator.phtml', 'article'),
+		    // the route to link to when a user clicks a control link
+		    array(
+		    	'route' => 'article',
+				's'		=> $this->s,
+		    )
+		);
+		?>
+	</div>
+</div>

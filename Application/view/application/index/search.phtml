@@ -1,0 +1,102 @@
+<div class="tab_content">
+<div class="tab_content_inner">
+			<a href="<?php echo HOME_URL.'search/all/'.$keywords?>" class="<?php echo ($type == 'all')?'active':'';?>">All</a>
+			<a href="<?php echo HOME_URL.'search/articles/'.$keywords?>" class="<?php echo ($type == 'articles')?'active':'';?>">Articles</a>
+			<a href="<?php echo HOME_URL.'search/blogs/'.$keywords?>" class="<?php echo ($type == 'blogs')?'active':'';?>">Blogs</a>
+			<a href="<?php echo HOME_URL.'search/must_reads/'.$keywords?>" class="<?php echo ($type == 'must_reads')?'active':'';?>">8Edge Must Read</a>
+		</div>
+        </div>
+<div class="articles_listing">
+
+	<div class="row-fluid padding-allsides">
+		
+		<?php
+		$article_type_tab_ar = array('all' => 'All', 'articles' => 'Articles', 'blogs' => 'Blogs', 'must_reads' => '8edge Must Reads');
+		$articles_lists = array(); 
+		if($type != 'all')
+		{
+			$articles_lists['all'] = $paginator;
+		}
+		else 
+		{
+			$articles_lists['articles'] 	= $articles;
+			$articles_lists['blogs'] 		= $blogs;
+			$articles_lists['must_reads'] 	= $must_read_8edge;
+		}
+		foreach($articles_lists as $article_type => $articles)
+		{
+			if(count($articles) > 0)
+			{
+				?>
+				<div class="article_list <?php echo $article_type; ?>">
+					<?php 
+					if($article_type != 'all')
+					{
+						?>
+						<h2><?php echo $article_type_tab_ar[$article_type];?></h2>
+						<?php 
+					}
+					?>
+					<div class="monthdescription_listing">
+		                <?php 
+						$count_article = 0;
+						foreach($articles as $article)
+						{
+							if($count_article++ >= 10 && $article_type == 'all')
+								break;
+								
+							$past_time_text = $this->getPastTimeFormat($article->date_created);
+							?>
+							<div class="month_description">
+								<div class="month_description_img"><?php echo ($count_article + ($pg-1)*GENERAL_NUM_RECORDS_IN_LIST);?></div>
+                                <div class="month_description_content">
+								<h2><a href="<?php echo HOME_URL.'article/'.$article->alias;?>"><?php echo stripslashes($article->title);?></a></h2>
+                                <ul class="monthdescription_listing">
+                                <li>
+								<i class="fa fa-clock-o"></i> &nbsp;<?php echo $past_time_text;?> ago
+                                </li>
+                                </ul>
+                                </div>
+		                   	</div>
+							<?php
+						}
+						?>
+					</div>
+					<?php 
+					if($article_type == 'all' && count($articles) > 10)
+					{
+						?>
+						<a href="<?php echo HOME_URL.'search/'.$article_type.'/'.$keywords?>" class="<?php echo ($type == 'all')?'active':'';?>">More</a>
+						<?php 
+					}
+					?>
+				</div>
+				<?php 
+			}
+			elseif($article_type == 'all')
+			{
+				?>
+				<div class="article_list">
+					No Article Found!
+				</div>
+				<?php
+			}
+		}
+		?>
+	</div>
+    <?php
+    if($paginator && count($paginator) > 0)
+    {
+		echo $this->paginationControl(
+			$this->paginator,
+    		'sliding',
+	    	array('application/partials/paginator.phtml', 'article'),
+		    array(
+		    	'route' => 'frontarticles',
+				'action'=> 'all/',
+		    )
+		);
+    }
+	?>
+</div>
+<div class="clearfix"></div>

@@ -1,0 +1,68 @@
+<?php 
+global $xignite_exchanges;
+global $exchange_suffixes;
+global $exchange_pad;
+$feeds = array();
+$content = @file_get_contents('http://feeds.finance.yahoo.com/rss/2.0/headline?s=' . str_pad(trim($symbol_code, '0'), $exchange_pad[$company_info->exchange], '0', STR_PAD_LEFT) . '.'.$exchange_suffixes[$company_info->exchange].'&lang=en-US');
+if($content)
+{
+	$x = new \SimpleXmlElement($content);
+	foreach($x->channel->item as $entry)
+	{
+		if(strstr($entry->link, 'http://'))
+		{
+			$feeds[strtotime($entry->pubDate)] = $entry;
+		}
+	}
+}
+
+$content = @file_get_contents('https://www.google.com/finance/company_news?q='.$company_info->exchange.':' . str_pad(trim($symbol_code, '0'), $exchange_pad[$company_info->exchange], '0', STR_PAD_LEFT) . '&output=rss');
+if($content)
+{
+	$x = new \SimpleXmlElement($content);
+	
+	foreach($x->channel->item as $entry)
+	{
+		if(strstr($entry->link, 'http://'))
+		{
+			$feeds[strtotime($entry->pubDate)] = $entry;
+		}
+	}
+}
+krsort($feeds);
+
+/* echo "<pre>";
+print_r($feeds);
+echo "</pre>"; */
+?>
+<div class="ups_rightside_row">
+	<div class="ups_rightside_head">
+		<h5>Related News:</h5>
+		<!-- <a class="fright" href="http://www.dev.edge.local/articles/all/user/kedar_user"> more &gt;&gt;</a> -->
+	</div>
+	<div>
+		<?php
+		if(count($feeds) > 0)
+		{
+			?>
+			<ol>
+				<?php
+				foreach($feeds as $feed)
+				{
+					?>
+					<li><a href="<?php echo $feed->link?>" target="_newTab"><?php echo $feed->title;?></a></li>
+					<?php
+				}
+				?>
+			</ol>
+			<?php
+		}
+		else
+		{
+			?>
+			<ul><li>No News Found Related to this Company.</li></ul>
+			<?php
+		}
+		?>
+	</div>
+</div>

@@ -1,0 +1,213 @@
+<?php 
+global $currency_symbols;
+$recent_data_feed 	= '';
+$prev_day_data_feed = '';
+$data_feed = array_values($this->company_data);
+//print_r($data_feed);
+if(count($data_feed) > 0)
+{
+	$recent_data_feed 	= isset($data_feed[0])?$data_feed[0]:'';
+	//$recent_data_feed 	= isset($data_feed[2])?$data_feed[c2]:'';
+}
+//print_r($recent_data_feed);
+$symbol = $this->company_info->symbol;
+list($symbol_code) = explode('.', $symbol);
+?>
+<div class="row layoutSecond">
+	<div class="col-lg-8">
+		<div class="whiteBG well company_info ">
+			<?php 
+			if($recent_data_feed != '')
+			{
+				?>
+				<div class="">
+					<span class="last_p"><?php echo $this->company_info->symbol;?>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $currency_symbols[$recent_data_feed->trading_curreny]?><?php echo number_format($recent_data_feed->last_price, 2);?></span>
+					<?php 
+					$price_change = ($recent_data_feed->last_price - $recent_data_feed->opening_price);
+					$price_change_percent = ($recent_data_feed->opening_price == 0)?0:round($price_change*100/$recent_data_feed->opening_price, 2);
+					?>
+					<span class="<?php echo ($price_change < 0)?'loss':'gain' ?>">
+						<?php 
+						if($price_change < 0)
+						{
+							?>
+							<i class="fa fa-arrow-down" style="font-size: 14px"></i>
+							<?php 
+						}
+						elseif($price_change > 0)
+						{
+							?>
+							<i class="fa fa-arrow-up" style="font-size: 14px"></i>
+							<?php 
+						}
+						?>	
+						<?php echo $price_change;?>&nbsp;(<?php echo ($price_change<0)?(-$price_change_percent):$price_change_percent;?>%)
+					</span>
+					<span class="date txt999"> <?php echo date('j M Y',strtotime($recent_data_feed->update_date));?></span>
+				</div>
+				<?php
+			}
+			?>
+			<div class="company_name current_data_stat">
+				<h4><?php echo ucwords(strtolower($this->company_info->name));?> <span class="exchange txt999"> - <?php echo $this->company_info->exchange;?></span></h4>
+			</div>
+			<!-- <div class="graph_data" style="margin-bottom: 20px; border-bottom: 3px solid #ccc;">
+				<img src="<?php echo IMAGE_URL?>ticker_graph.png" style="height: 250px; width: 100%" />
+			</div> -->
+			<div class="graph_data">
+				<table class="data">
+		 			<tr>
+		 				<td>
+		 					<label>52 Wk High:</label>
+		 					<span><?php echo (isset($high_52) && $high_52 !='')?$high_52:'N/A'; ?></span>
+		 				</td>
+			 			<td>
+			 				<label>Div:</label>
+			 				<span><?php echo (isset($recent_data_feed->cash_dividend))?$recent_data_feed->cash_dividend:'N/A'; ?>&nbsp;<?php echo (isset($recent_data_feed->dividend_currency))?$recent_data_feed->dividend_currency:''; ?></span>
+		 				</td>
+			 			<td>
+			 				<label>Market Cap:</label>
+		 					<span>N/A</span>
+		 				</td>
+			 		</tr>
+			 		<tr>
+			 			<td>
+			 				<label>52 Wk Low:</label>
+		 					<span><?php echo (isset($low_52) && $low_52 !='')?$low_52:'N/A'; ?></span>
+			 			</td>
+		 				<td>
+		 					<label>Div Yield:</label>
+		 					<span><?php echo (isset($recent_data_feed->cash_dividend))?$recent_data_feed->cash_dividend:'N/A'; ?>&nbsp;<?php echo (isset($recent_data_feed->dividend_currency))?$recent_data_feed->dividend_currency:''; ?></span>
+		 				</td>
+		 				<td>
+		 					<label>Volume:</label>
+		 					<span><?php echo (isset($recent_data_feed->volume))?number_format($recent_data_feed->volume):'N/A'; ?></span>
+			 			</td>
+		 			</tr>
+		 		</table>
+	 		</div>
+			<div class="graph">
+				<!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+			    <script type="text/javascript">
+			      google.load("visualization", "1", {packages:["corechart"]});
+			      google.setOnLoadCallback(drawChart);
+			      function drawChart() {
+			        var data = google.visualization.arrayToDataTable([
+			        	['Date', 'Closing Price'],
+
+			        	<?php
+			        	$closing_price = array();
+			        	foreach($this->company_data as $feed)
+			        	{
+			        		$closing_price[] = $feed->last_price;
+			        		?>
+			        		['<?php echo $feed->update_date; ?>',  <?php echo $feed->last_price; ?> ],
+			        		<?php
+			        	}
+			        	?>
+			        ]);
+			
+			        var options = {
+			          //title: 'Company Performance'
+			        	direction: 1,
+			        	legend: 'none',
+			            pointSize: 5,
+			            vAxis: { minValue: <?php echo floor(min($closing_price)-1); ?>}
+			        };
+			
+			        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+			        chart.draw(data, options);
+			      }
+			    </script>
+				<div id="chart_div" style="width: 100%; height: 300px;"></div>
+				 -->
+			</div>
+	   
+	   		<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Related Articles</h5>
+					<!-- <a class="fright" href="http://www.dev.edge.local/articles/all/user/kedar_user"> more &gt;&gt;</a> -->
+				</div>
+				<div>
+					<?php
+					if(count($articles) > 0)
+					{
+						?>
+						<ol>
+							<?php
+							foreach($articles as $article)
+							{
+								?>
+								<li><a href="<?php echo $this->url('frontarticle', array('action' => 'article', 'alias' => $article->alias))?>"><?php echo $article->title;?></a></li>
+								<?php
+							}
+							?>
+						</ol>
+						<?php
+					}
+					else
+					{
+						?>
+						<ul><li>No Article Found Related to this Company.</li></ul>
+						<?php
+					}
+					?>
+				</div>
+			</div>
+			<?php 
+				echo $this->partial('application/partials/news_feeds.phtml', 
+					array(
+							'symbol_code'	=> $symbol_code,
+							'company_info'	=> $company_info,
+						)
+				); 
+			?>
+	   </div>
+	</div><!--col-lg-8-->
+	
+	<div class="col-lg-4">
+	 	<div class="whiteBG well descrpition" id="author_right">
+	 		<?php 
+	 		/*if($recent_data_feed != '')
+	 		{
+		 		?>
+		 		<ul>
+		 			<li>
+		 				<label>Exchange:</label>
+		 				<span><?php echo $recent_data_feed->exchange; ?></span>
+		 			</li>
+		 			<li>
+		 				<label>Opening Price:</label>
+		 				<span><?php echo $recent_data_feed->opening_price; ?></span>
+		 			</li>
+		 			<li>
+		 				<label>Closing Price:</label>
+		 				<span><?php echo $recent_data_feed->last_price; ?></span>
+		 			</li>
+		 			<li>
+		 				<label>Volume:</label>
+		 				<span><?php echo $recent_data_feed->volume; ?></span>
+		 			</li>
+		 			<li>
+		 				<label>Split Ratio:</label>
+		 				<span><?php echo $recent_data_feed->split_ratio; ?></span>
+		 			</li>
+		 			<li>
+		 				<label>Cash Dividend:</label>
+		 				<span><?php echo $recent_data_feed->cash_dividend; ?></span>
+		 			</li>
+		 		</ul>
+		 		<?php 
+	 		}
+	 		else
+	 		{
+	 			?>
+	 			<ul>
+	 				<li>No Data Found!</li>
+	 			</ul>
+	 			<?php
+	 		}*/
+	 		?>
+	 	</div>	
+	 </div><!--row-->
+</div><!--row-->

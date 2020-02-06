@@ -1,0 +1,279 @@
+<?php  $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+$title=$this->escapeHtml($article->title);
+//print_r($article);
+
+?>
+<div>
+	<div class="col-lg-9">
+		<div class="whiteBG well descrpition ">
+			<h4><?php echo ucfirst($this->escapeHtml($article->title));?></h4>
+			
+			<div class="share_this_page_article_bottom">
+				<div class="share_unit">
+					<div class="fwb fl mt3"></div>	
+					<div class="ml35 fl">
+						<div class="share_button" id="email_share">
+							<input id ="share_email" type=button onClick="location.href='mailto:?Body=I thought you might find this article on 8edge interesting:<?php echo $actual_link ;?> ?source=from_friend_client'" value='Email'>
+						</div>
+                        <div class="share_print"><a href="javascript:void(0)" onclick="PrintElem('#article_view')">Print</a></div>
+						<div class="comment-count">
+							<?php echo $comment_count_article;?><span> <?php echo ($comment_count_article == 1)?'Comment':'Comments';?></span>
+						</div>
+						<div class="share_button_tweet">
+							<button onclick="myFunction()">Tweet</button>				
+						</div>
+                    </div>
+				</div>
+			</div>
+			
+			<span class="article_date_user">
+				<?php echo date('M d, Y H:i', strtotime($article->date_created));?> 
+				<?php 
+				if($article->primary_ticker != '')
+				{
+					?>
+					| About : <a href="<?php echo HOME_URL.'symbol/'.trim($article->primary_ticker, ', ');?>"><?php echo trim($article->primary_ticker, ', ')?></a>
+					<?php
+				}
+				?>
+				<?php 
+				$secondary_tickers = explode(', ', trim($article->secondary_ticker, ', '));
+				if($article->secondary_ticker != '' && count($secondary_tickers) > 0)
+				{
+					?>
+					, Includes:
+					<?php
+					$cnt = 0;
+					foreach($secondary_tickers as $secondary_ticker)
+					{
+						echo ($cnt == 0?'':', ');
+						?><a href="<?php echo HOME_URL.'symbol/'.$secondary_ticker;?>"><?php echo $secondary_ticker;?></a><?php
+						$cnt++;
+					}
+				}
+				?>
+				</span>
+            <div class="article_summery" id="article_view">
+	            <h3>Summary</h3>
+	            <ul>
+		            <li><?php echo $this->escapeHtml($article->bullet1);?></li>
+		            <li><?php echo $this->escapeHtml($article->bullet2);?></li>
+		            <li><?php echo $this->escapeHtml($article->bullet3);?></li>
+		            <?php 
+		            if($article->bullet4 != '')
+		            {
+		            	?>
+		            	<li><?php echo $this->escapeHtml($article->bullet4);?></li>
+		            	<?php
+		            }
+		            ?>
+		            <?php 
+		            if($article->bullet5 != '')
+		            {
+		            	?>
+		            	<li><?php echo $this->escapeHtml($article->bullet5);?></li>
+		            	<?php
+		            }
+		            ?>
+	            </ul>
+	            
+	            <?php 
+	            if($this->zfcUserIdentity())
+	            {
+		            ?>
+		            <P><?php echo $article->description;?></P>
+		            
+					<?php 
+					$disclosure = '';
+					
+					if($article->position_dislosure == 'no')
+					{
+						$disclosure = 'The author has no positions in any stocks mentioned, and no plans to initiate any positions within the next 72 hours.';
+					}
+					elseif($article->position_dislosure == 'may')
+					{
+						$disclosure = 'The author has no positions in any stocks mentioned, but may initiate a '.$article->position_types.' position in '.$article->position_stocks.' over the next 72 hours.';
+					}
+					elseif($article->position_dislosure == 'yes')
+					{
+						$disclosure = 'The author is '.$article->position_stocks.' '.$article->position_types.'.';
+					}
+					
+					if($article->business_rel_disclosure == 'own')
+					{
+						$disclosure .= ' The author wrote this article themselves, and it expresses their own opinions. The author is not receiving compensation for it (other than from 8Edge). The author has no business relationship with any company whose stock is mentioned in this article.';
+					}
+					elseif($article->business_rel_disclosure =='not_own')
+					{
+						$disclosure .= '<br><br><strong>Business relationship disclosure:</strong>'. $this->escapeHtml($article->business_rel_not_own_specify);
+					}
+					if($article->position_other_info != '')
+					{
+						$disclosure .= '<br><br><strong>Additional disclosure:</strong>' . $this->escapeHtml($article->position_other_info);
+					}
+					?>
+	            	<P><strong>Disclosure:</strong> <?php echo $disclosure;?></P>
+	            	<?php
+	            }
+	            else
+	            {
+	            	?>
+	            	<P><?php echo $this->getExcerpt($article->description, 1000);?></P>
+	            	<a href="<?php echo $this->url('zfcuser/login')?>?redirect=<?php echo HOME_URL.'article/'.$article->alias?>">More</a>
+	            	<?php
+	            }
+	            ?>
+            </div>
+		
+			<?php 
+			if($this->zfcUserIdentity())
+			{
+				?>
+				<div class="article_tags"><p><strong>Tags: </strong>
+					<?php 
+					if(count($categories) > 0)
+					{
+						$cnt = 0;
+						foreach($categories as $category)
+						{
+							echo ($cnt == 0?'':', ');
+							?>
+							<a href="<?php echo HOME_URL.'articles/all/'.$category->cat_alias;?>"><?php echo $category->cat_name;?></a>
+							<?php
+							$cnt++;
+						}
+					}
+					?>
+					</p>
+				</div>
+				<div class="article_bottom_links">
+					<a href="javascript:void(0)" class="report_abuse_box_open" rel=''><i class="fa fa-file-text"></i> Report Abuse!</a>
+					&nbsp;|&nbsp;
+					<a href="javascript:void(0)" class="comment_box_open" rel=''><i class="fa fa-comments"></i> Comment!</a>
+					<?php 
+					if($article->user_site_url != '')
+					{
+						?>
+						&nbsp;|&nbsp;
+						<a href="<?php echo (strstr($article->user_site_url, 'http://')?'':'http://').$article->user_site_url;?>"><i class="fa fa-link"></i><?php echo $article->user_site_name?></a>
+						<?php 
+					}
+					?>
+					<div id="report_abuse_box_" class="comment_abuse_box">
+						<fieldset>
+							<label>Write About Abuse:</label> <br>
+							<textarea spellcheck="true" class="report_abuse" id="report_abuse_" name="report_abuse_" cols="" rows=""></textarea>
+						</fieldset>
+						<input class="next_step report_abuse_btn article" type="button" name="report_abuse_btn" id="report_abuse_btn" value="Report" />
+					</div>
+				</div>
+				<div id="comment_box" class="comment_abuse_box">
+					<input type="hidden" name="art_id" id="art_id" value="<?php echo $article->article_id;?>" />
+					<fieldset>
+						<label>Write Your Comment:</label> <br>
+						<textarea spellcheck="true" class="comment" id="comment" name="comment" cols="" rows=""></textarea>
+					</fieldset>
+					<input class="next_step" type="button" name="comment_btn" id="comment_btn" value="Comment" />
+				</div>
+				<?php 
+			}
+			?>
+	   	</div>
+		<?php 
+		if($this->zfcUserIdentity())
+		{
+			?>
+			<div class="whiteBG well descrpition " id="comment_listing_box">
+				<h3>Comments and discussion boards:</h3>
+				<?php
+				//print_r($comments);
+				foreach($comments as $comment)
+				{
+					?>
+					<div>
+						<div>
+							<label style="margin-bottom: 0px">By: <?php echo $authors[$comment->author_id]?></label>
+							<div class="comment_date">
+								<strong><i class="fa fa-comments"></i> Commented On: </strong>
+								<?php echo date('M d, Y H:i', strtotime($comment->date_created));?>
+								&nbsp;|&nbsp;
+								<a href="javascript:void(0)" class="report_abuse_box_open" rel='<?php echo $comment->comment_id?>'><i class="fa fa-file-text"></i> Report Abuse!</a>
+								&nbsp;|&nbsp;
+								<a href="javascript:void(0)" class="reply_box_open" rel='<?php echo $comment->comment_id?>'><i class="fa fa-comments"></i> Reply!</a>
+								
+								<div id="report_abuse_box_<?php echo $comment->comment_id?>" class="reply_abuse_box">
+									<fieldset>
+										<textarea spellcheck="true" class="report_abuse" id="report_abuse_<?php echo $comment->comment_id?>" name="report_abuse_<?php echo $comment->comment_id?>" cols="" rows=""></textarea>
+									</fieldset>
+									<input class="next_step report_abuse_btn comment" type="button" name="report_abuse_btn_<?php echo $comment->comment_id?>" id="report_abuse_btn_<?php echo $comment->comment_id?>" value="Report" style="float: right; margin-right: 0px;" />
+								</div>
+							</div>
+						</div>
+						
+						<div style="border: 1px solid #efefef; margin-bottom: 20px; background: none repeat scroll 0 0 #fafafa; float: left; width: 100%;">
+							<p id="com<?php echo $comment->comment_id;?>" class="greyText comment_p" style="margin: 0px; margin-bottom: 15px;"><?php echo nl2br($comment->comment);?></p>
+							<div class="reply_box" id="reply_data_box_<?php echo $comment->comment_id?>">
+								<?php
+								if(count($comment->children) > 0)
+								{
+									foreach($comment->children as $reply)
+									{
+										?>
+										<div style="margin: 5px;">
+											<label style="margin-bottom: 0px;font-size: 12px">By: <?php echo $authors[$reply->author_id]?></label>
+											<div class="comment_date">
+												<strong><i class="fa fa-comments"></i> Replied On: </strong>
+												<?php echo date('M d, Y H:i', strtotime($reply->date_created));?>
+												&nbsp;|&nbsp;
+												<a href="javascript:void(0)" class="report_abuse_box_open" rel='<?php echo $reply->comment_id?>'><i class="fa fa-file-text"></i> Report Abuse!</a>
+												<div id="report_abuse_box_<?php echo $reply->comment_id?>" class="reply_abuse_box">
+													<fieldset>
+														<textarea spellcheck="true" class="report_abuse" id="report_abuse_<?php echo $reply->comment_id?>" name="report_abuse_<?php echo $reply->comment_id?>" cols="" rows=""></textarea>
+													</fieldset>
+													<input class="next_step report_abuse_btn reply" type="button" name="report_abuse_btn_<?php echo $reply->comment_id?>" id="report_abuse_btn_<?php echo $reply->comment_id?>" value="Report" style="float: right; margin-right: 0px;" />
+												</div>
+											</div>
+										</div>
+										<p class="greyText reply_p" id="com<?php echo $reply->comment_id;?>" style="margin: 5px; margin-bottom: 15px;"><?php echo nl2br($reply->comment);?></p>
+										<?php
+									} 
+								}
+								?>
+							</div>
+						</div>
+						
+						<div id="reply_box_<?php echo $comment->comment_id?>" class="reply_abuse_box_reply">
+							<input type="hidden" name="art_id" id="art_id" value="<?php echo $article->article_id;?>" />
+							<fieldset>
+								<textarea spellcheck="true" class="reply" id="reply_<?php echo $comment->comment_id?>" name="reply_<?php echo $comment->comment_id?>" cols="" rows=""></textarea>
+							</fieldset>
+							<input class="next_step reply_btn" type="button" name="reply_btn_<?php echo $comment->comment_id?>" id="reply_btn_<?php echo $comment->comment_id?>" value="Reply" style="float: right; margin-right: 0px;"/>
+						</div>
+					</div>
+					<?php
+				}
+				?>
+		   	</div>
+		   	<?php 
+		}
+		?>
+	</div><!--col-lg-8-->
+	
+	<div class="col-lg-3">
+		<div class="whiteBG well descrpition">
+        	<?php 
+				echo $this->partial('application/partials/article_right_column.phtml', 
+					array(
+						'member' 				=> $member,
+        				'user_articles_count' 	=> $user_articles_count,
+						'user_blogs_count' 		=> $user_blogs_count,
+						'user_comments_count'	=> $user_comments_count,
+						'followed_status'		=> $followed_status,
+						'followerCount'			=> $followerCount,
+						'followedCount'			=> $followedCount,
+						)
+				); 
+			?>
+		</div>	
+	</div><!--row-->
+</div><!--row-->

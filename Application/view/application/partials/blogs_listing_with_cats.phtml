@@ -1,0 +1,149 @@
+<div class="article_menu">
+	<div id="article_categories" class="article_categories">
+		<ul>
+			<li><a href="<?php echo HOME_URL . 'articles/all' .  (($user == '')?'':'/user/'.$user);?>" class="<?php echo ($cat == 'all' || $cat == '')?'active':''?>">All</a></li>
+			<?php
+			$p_count = 0;
+			$selected_cat_index = 1;
+			foreach($categories as $c_indx => $category)
+			{
+				$parent_url 	= HOME_URL . 'articles/all/' . $category->alias . (($user == '')?'':'/user/'.$user);
+				
+				if($cat == $category->alias)
+				{
+					$selected_cat_index = $c_indx;
+					$class = 'active';
+				}
+				else
+				{
+					$class = '';
+				}
+				?>
+				<li>
+					<a href="<?php echo $parent_url; ?>" class="<?php echo $class?> "><?php echo $category->name;?></a>
+					
+				</li>
+				<?php
+				$p_count++;
+			} 
+			?>
+		</ul>
+	</div>
+	<div id="article_categories_submenu" class="article_categories_submenu">
+		<!-- SUB Categories -->
+		<?php
+		$category = $categories[$selected_cat_index];
+		?>
+		<ul id="subcat_<?php echo $category->alias; ?>" class="<?php echo ($cat == '' && $p_count == 0)?'':(($cat == $category->alias)?'':''); ?> sub_cat">
+			<li><a href="<?php echo HOME_URL;?>articles/all" class="<?php echo ($sub_cat == '')?'active':''?>">All</a></li>
+			<?php
+			$s_count = 0;
+			foreach($category->children as $sub_category)
+			{
+				$sub_url 	= HOME_URL . 'articles/all/' . $category->alias . '/' . $sub_category->alias . (($user == '')?'':'/user/'.$user);
+				
+				?>
+				<li>
+					<a href="<?php echo $sub_url; ?>" class="<?php echo ($sub_cat == $sub_category->alias)?'active':''?> "><?php echo $sub_category->name;?></a>
+				</li>
+				<?php
+			} 
+			$s_count++;
+			?>
+		</ul>
+	</div>
+</div>
+<div class="cboth"></div>
+
+<div class="articles_listing">
+	<?php /*?><div class="tab_heading">Articles</div><?php */?>
+	<div class="row-fluid padding-allsides">
+		<?php 
+		$count_blog = 0;
+		foreach ($this->paginator as $blog)
+		{
+			$diff_time =  (($blog->date_created)?(time()-strtotime($blog->date_created)):0);
+			$days = (int)($diff_time/(3600*24));
+			if($diff_time < 60)
+			{
+				$past_time_text = (int)$diff_time." Seconds";
+			}
+			elseif($diff_time < 60*60)
+			{
+				$past_time_text = (int)($diff_time/60)." Minutes";
+			}
+			elseif($diff_time < 60*60*24)
+			{
+				$past_time_text = (int)($diff_time/(60*60))." Hours";
+			}
+			elseif($days < 7)
+			{
+				$past_time_text = (int)$days." Days";
+			}
+			elseif($days > 7 && $days < 30)
+			{
+				$past_time_text = (int)($days/7)." weeks";
+			}
+			elseif($days > 30 && $days < 365)
+			{
+				$past_time_text = (int)($days/30)." months";
+			}
+			elseif($days > 365)
+			{
+				$past_time_text = (int)($days/365)." years";
+			}
+			
+			
+			if($count_blog % 2 == 0 && $count_blog != 0)
+			{
+				?>
+				</div><div class="row-fluid padding-allsides">
+				<?php
+			}
+			
+			$user_image = ($blog->user_image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$blog->user_image;
+			$count_blog++;
+			?>
+			<div class="span12">
+	       <?php /*?> 	<div class="month left">
+	            	<span><?php echo date('M', strtotime($blog->date_created));?></span>
+	                <span><?php echo date('Y', strtotime($blog->date_created));?></span>
+	            </div><?php */?>
+	            <div class="month_description left">
+                <div class="month_description_img">
+	            	<a href="<?php echo HOME_URL.'portfolio/'.$blog->username;?>">
+	            		<img src="<?php echo $user_image?>" alt="user_image">
+	            	</a>
+                    </div>
+                    <div class="month_description_content">
+	            	<h2><a href="<?php echo HOME_URL.'blog/'.$blog->alias;?>"><?php echo substr(strip_tags($blog->title), 0, 62).((strlen($blog->title)>62)?"...":'');?></a></h2>
+                    <p><?php echo substr(strip_tags($blog->description), 0, 200).((strlen($blog->description)>200)?"...":'');?></p>
+	                <ul class="monthdescription_listing">
+	                	<li><i class="fa fa-clock-o"></i> &nbsp;<?php echo $past_time_text;?> ago</li>
+	                    <li><a href="<?php echo (strstr($blog->source, 'http://')?$blog->source:'http://'.$blog->source);?>"><i class="fa fa-folder-open"></i> &nbsp;Source</a></li>
+	                </ul>
+                    </div>
+	            </div>
+	        </div>
+	        <?php 
+		}
+		?>
+	</div>
+    <?php
+	// add at the end of the file after the table
+	echo $this->paginationControl(
+	// the paginator object
+	$this->paginator,
+    // the scrolling style
+    'sliding',
+    // the partial to use to render the control
+    array('application/partials/paginator.phtml', 'blog'),
+	    // the route to link to when a user clicks a control link
+	    array(
+	    	'route' => 'frontblogs',
+			'action'=> 'all/',
+	    )
+	);
+	?>
+</div>
+<div class="clearfix"></div>

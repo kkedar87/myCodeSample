@@ -1,0 +1,63 @@
+<?php 
+if ($this->pageCount)
+{ 
+	if(isset($this->s) && $this->s != '')
+	{
+		$search_qr = '?s='.$this->s;
+	}
+	else
+	{
+		$search_qr = '';
+	}
+	?>
+    <div class="outer_pegination">
+         <ul class="pagination">
+             <!-- Previous page link -->
+             <?php if (isset($this->previous)): ?>
+                 <li>
+                     <a href="<?php echo $this->url($this->route).'/'.$this->action; ?><?php echo $this->previous; ?><?php echo $search_qr?>">
+                         &lt;&lt;
+                     </a>
+                 </li>
+             <?php else: ?>
+                 <li class="disabled">
+                     <a href="#">
+                         &lt;&lt;
+                     </a>
+                 </li>
+             <?php endif; ?>
+
+             <!-- Numbered page links -->
+             <?php foreach ($this->pagesInRange as $page): ?>
+                 <?php if ($page != $this->current): ?>
+                     <li>
+                         <a href="<?php echo $this->url($this->route).'/'.$this->action;?><?php echo $page; ?><?php echo $search_qr?>">
+                             <?php echo $page; ?>
+                         </a>
+                     </li>
+                 <?php else: ?>
+                     <li class="active">
+                         <a href="#"><?php echo $page; ?></a>
+                     </li>
+                 <?php endif; ?>
+             <?php endforeach; ?>
+
+             <!-- Next page link -->
+             <?php if (isset($this->next)): ?>
+                 <li>
+                     <a href="<?php echo $this->url($this->route).'/'.$this->action; ?><?php echo $this->next; ?><?php echo $search_qr?>">
+                         >>
+                     </a>
+                 </li>
+             <?php else: ?>
+                 <li class="disabled">
+                     <a href="#">
+                         >>
+                     </a>
+                 </li>
+             <?php endif; ?>
+         </ul>
+     </div>
+ 	<?php
+}
+?>

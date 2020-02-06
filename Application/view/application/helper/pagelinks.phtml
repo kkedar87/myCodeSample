@@ -1,0 +1,20 @@
+<?php 
+if(count($pages) > 0 )
+{
+	?>
+	<ul>
+		<?php 
+		foreach($pages as $page)
+		{
+			?>
+			<li>
+		    	<a href="<?php echo $this->url('frontpage', array('alias' => $page->alias));?>" ><?php echo $page->title;?></a>
+			</li>
+			<?php
+		}
+		?>
+	</ul>
+	<?php
+}
+
+?>

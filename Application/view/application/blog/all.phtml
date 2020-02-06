@@ -1,0 +1,12 @@
+<?php 
+echo $this->partial('application/partials/blogs_listing_with_cats.phtml', 
+	array(
+		'paginator' => $paginator,
+		'blogs' 	=> $blogs,
+		'categories'=> $categories,
+		'cat'		=> $cat,
+		'sub_cat'	=> $sub_cat,
+		'user'		=> $user,
+	)
+); 
+?>

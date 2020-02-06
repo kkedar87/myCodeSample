@@ -1,0 +1,41 @@
+<div class="articles_listing">
+	<div class="row-fluid padding-allsides">
+		<div class="tab_heading">8edge Must Reads</div>
+		<?php 
+		$count_article = 0;
+		foreach ($this->paginator as $article)
+		{
+			if($count_article % 2 == 0 && $count_article != 0)
+			{
+				?>
+				</div><div class="row-fluid padding-allsides">
+				<?php
+			}
+			
+			$count_article++;
+			?>
+			<div class="span12">
+	            <div class="month_description left">
+                    <div class="month_description_content" style="width: 100%">
+		            	<h2><span style="color: #333"><?php echo (isset($cur_page_no)?(($cur_page_no-1)*RECORDS_PER_PAGE + $count_article):$count_article); ?>. </span><a href="<?php echo $article->link;?>"><?php echo $article->title;?></a></h2>
+	                    <p><?php echo stripslashes($article->description);?></p>
+                    </div>
+	            </div>
+	        </div>
+	        <?php 
+		}
+		?>
+	</div>
+    <?php
+	echo $this->paginationControl(
+	$this->paginator,
+    'sliding',
+    array('application/partials/paginator.phtml', 'article'),
+	    array(
+	    	'route' => 'frontarticles',
+			'action'=> 'all/',
+	    )
+	);
+	?>
+</div>
+<div class="clearfix"></div>

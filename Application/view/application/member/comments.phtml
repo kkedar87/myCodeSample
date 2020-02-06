@@ -1,0 +1,97 @@
+<div class="user_portfolio_section">
+	<?php
+	$memeber_name = ($member->display_name == '')?$member->username:$member->display_name;
+	?>
+	
+    <div class="user_profile_section">
+		<div class="ups_leftside">
+			<?php 
+				echo $this->partial('application/partials/portfolio_left_column.phtml', 
+					array(
+						'member' 				=> $member,
+        				'user_articles_count' 	=> $user_articles_count,
+						'user_blogs_count'		=> $user_blogs_count,
+						'user_comments_count'	=> $user_comments_count,
+						'followed_status'		=> $followed_status,
+						'followerCount'			=> $followerCount,
+						'followedCount'			=> $followedCount,
+						)
+				); 
+			?>
+		</div>
+		<div class="ups_rightside">
+			<div class="article_menu2">
+				<?php 
+                if($type == 'articlecomments')
+                {
+                	?>
+                	<h5 class="articale_title">Latest Comments on articles written by <?php echo $this->userDisplayName($member);?></h5>
+                	<?php 
+                }
+                else
+                {
+                	?>
+                	<h5 class="articale_title">Comments by <?php echo $this->userDisplayName($member);?></h5>
+                	<?php 
+                }
+                ?>
+			</div>
+			<div class="cboth"></div>
+			
+			<div>
+				<div class="row-fluid padding-allsides">
+					<?php 
+					$count = 0;
+					foreach ($paginator as $comment)
+					{
+						$count++;
+						?>
+						<div class="span12">
+				            <div class="month_description left">
+			                    <div class="month_description_content" style="width: 100%">
+					            	<h2>
+					            		<span style="color: #333"><?php echo $count+(($pg-1)*RECORDS_PER_PAGE); ?>. </span>
+					            		<a href="<?php echo HOME_URL.'article/'.$comment->article_alias;?>"><?php echo $comment->article_title;?></a>
+					            	</h2>
+				                    <p><?php echo $this->getExcerpt($comment->comment, 400);?></p>
+					                <ul class="monthdescription_listing">
+					                	<li><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($comment->date_created);?> ago</li>
+					                    <?php 
+					                    if($type == 'articlecomments')
+					                    {
+					                    	$memeber_name = ($comment->display_name == '')?$comment->username:$comment->display_name;
+					                    	?>
+						                    <li><i class="fa fa-user"></i>&nbsp;
+						                    	Author: <a href="<?php echo HOME_URL.'user/'.$comment->username;?>"><?php echo $memeber_name;?></a>
+						                   	</li>
+						                   	<?php 
+					                    }
+					                    ?>
+					                </ul>
+			                    </div>
+				            </div>
+				        </div>
+				        <?php 
+					}
+					?>
+				</div>
+			    <?php
+				// add at the end of the file after the table
+				echo $this->paginationControl(
+				// the paginator object
+				$this->paginator,
+			    // the scrolling style
+			    'sliding',
+			    // the partial to use to render the control
+			    array('application/partials/paginator.phtml', 'article'),
+				    // the route to link to when a user clicks a control link
+				    array(
+				    	'route' => 'frontarticles',
+						'action'=> 'all/',
+				    )
+				);
+				?>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,76 @@
+<?php $this->headScript()
+            ->prependFile($this->basePath() . '/front/js/tinymce_script.js')
+            ->prependFile($this->basePath() . '/front/vendor/tinymce/tinymce.min.js')
+             ; ?>
+<?php
+$user_id = '';
+if($this->zfcUserIdentity())
+{
+	$user_id = $this->zfcUserIdentity()->getId();
+}
+$memeber_name = ($member->display_name == '')?$member->username:$member->display_name;
+$memeber_image = ($member->image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$member->image;
+?>
+<div class="ups_leftside_row">
+	<div class="ups_image">
+		<img src="<?php echo $memeber_image;?>" alt="user_image" class="img-thumbnail">
+        </div>
+		<h5>
+			<a href="<?php echo HOME_URL.'user/'.$member->username;?>"><?php echo $memeber_name; ?></a>
+		</h5>
+</div>
+<div class="btn_row">
+	<input type="button" value="Profile" class="yellow_btn" id="user_profile" onclick="window.location.href='<?php echo HOME_URL.'user/'.$member->username;?>'" />
+</div>
+<?php 
+if(!$this->zfcUserIdentity())
+{ 
+   	?>
+	<div class="btn_row">
+		<input type="button" value="Follow" class="yellow_btn" onclick="window.location.href='<?php echo HOME_URL.'user/login?redirect='.HOME_URL.'user/'.$member->username?>'"/>
+	</div>
+	<div class="btn_row">
+		<input type="button" value="Send Message" class="yellow_btn" onclick="window.location.href='<?php echo HOME_URL.'user/login?redirect='.HOME_URL.'user/'.$member->username?>'"/>
+	</div>
+   	<?php
+}
+else
+{
+  	?>
+	<div class="btn_row">
+		<input type="button" value="Un-Follow" id="un_follow_btn" rel="<?php echo $member->user_id; ?>" class="yellow_btn" style="<?php echo ($followed_status)?'display: block':'display:none'?>" />
+		<input type="button" value="Follow" id="follow_btn" rel="<?php echo $member->user_id; ?>" class="yellow_btn" style="<?php echo (!$followed_status)?'display: block':'display:none'?>"/>
+	</div>
+	<div class="btn_row">
+		<input type="button" value="Send Message" class="yellow_btn" id="send_msg_btn" />
+	</div>
+   	<?php
+}
+?>
+<div class="dnone" id="send_msg_box">
+	<div id="send_msg_form">
+    	<div class="edit_lightbox">
+            <form action="<?php echo $this->url('frontsearch', array('action' => 'send'));?>" method="post" id="send_msg_form_tag">
+                <div class="edit_lightbox_left">
+	                <div class="user_edit_lightbox_row">
+		                <input type="hidden" value="" name="msg_id">			
+						<input type="hidden" value="<?php echo $member->user_id;?>" name="to">			
+						<label for="sub">Subject</label><input type="text" value="" id="sub" name="sub" class="">
+					</div>
+	                <div class="user_edit_lightbox_row">
+						<label for="msg">Message</label>
+		                <textarea id="msg" name="msg" class="" style="height: 5px"></textarea>
+					</div>
+                </div>
+                <div class="edit_lightbox_right">
+	                <div class="btn_section">
+						<input type="button" name="send_form_btn" id="send_form_btn" value="Send" />
+						<input type="button" name="send_form_btn" onclick="$('#send_msg_box').hide();" value="Cancel" style="margin-left: 10px" />
+	                </div>
+                </div>
+			</form>
+            
+			<div id="send_msg_return_msg"></div>
+		</div>
+	</div>
+</div>

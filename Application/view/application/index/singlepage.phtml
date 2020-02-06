@@ -1,0 +1,20 @@
+<div class="row layoutSecond">
+	<div class="col-lg-12">
+		<?php 
+		if($page->image != '')
+		{
+			?>
+			<a class="thumbnail bigPost">
+				<img class="bigImg" src="<?php echo PAGE_IMAGE_URL.$page->image;?>" alt="<?php echo $page->title; ?>"	title="<?php echo $page->title;?>" />
+		   	</a><!--thumbnail-->
+			<?php
+		}
+		?>
+		<div class="whiteBG well descrpition ">
+			<h4><?php echo $page->title;?></h4>
+			<p class="greyText"><?php echo $page->content;?></p>
+	   </div>
+	</div><!--col-lg-8-->
+</div><!--row-->
+
+<div style="clear:both;"></div>

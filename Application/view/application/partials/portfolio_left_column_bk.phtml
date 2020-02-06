@@ -1,0 +1,134 @@
+<?php
+$user_id = '';
+if($this->zfcUserIdentity())
+{
+	$user_id = $this->zfcUserIdentity()->getId();
+}
+$memeber_name = ($member->display_name == '')?$member->first_name.' '.$member->first_name:$member->display_name;
+$memeber_image = ($member->image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$member->image;
+$this->headTitle ( $memeber_name );
+?>
+<div class="ups_leftside_row">
+	<div class="ups_image">
+		<img src="<?php echo $memeber_image;?>" alt="user_image" class="img-thumbnail">
+		<h5>
+			<a href="<?php echo HOME_URL.'user/'.$member->username;?>"><?php echo $memeber_name; ?></a>
+			<?php 
+			if($member->user_id == $user_id)
+			{
+				?>
+				<div class="ups_edit"><a id="portfolio_name_edit_box" href="#portfolio_name_edit">edit &nbsp;</a></div> 
+				<div class="dnone">
+					<div id="portfolio_name_edit">
+						<div class="edit_lightbox">
+                        
+							<form action="<?php echo $this->url('frontsearch', array('action' => 'edituser'));?>" method="post" id="portfolio_name_edit_form" enctype="multipart/form-data">
+                            <div class="edit_lightbox_left">
+                            <div class="user_edit_lightbox_row">
+								<label for="sub">Display Name</label>
+                                <input type="text" value="<?php echo $member->display_name?>" id="display_name" name="display_name" class="">
+								</div>
+								<!-- <label for="sub">Email</label><input type="text" value="<?php echo $member->email?>" id="email" name="email" class="">
+								<br> -->
+                                <div class="user_edit_lightbox_row">
+								<label for="sub">Change Profile Picture</label>
+                                <div class="image_file">
+								<input type="file" id="image" name="image" class="">
+                                </div>
+                                </div>
+                                </div>
+                                <div class="edit_lightbox_right">
+                                <div class="btn_section">
+								<input type="button" name="portfolio_name_save" id="portfolio_name_save" value="Save" />
+                                </div>
+                                </div>
+							</form>
+							<div id="portfolio_name_return_msg"></div>
+						</div>
+					</div>
+				</div>
+				<?php
+			}
+			?>
+		</h5>
+	</div>
+</div>
+<div class="ups_leftside_row">
+	<div class="ups_article_counts">
+		<a href="<?php echo HOME_URL . 'articles/all/user/'.$member->username; ?>">
+			Articles <span>(<?php echo $user_articles_count; ?>)</span>
+		</a> 
+		<a href="<?php echo HOME_URL . 'blogs/all/user/'.$member->username; ?>">
+			Blog Posts <span>(<?php echo $user_blogs_count; ?>)</span>
+		</a> 
+		<a href="<?php echo HOME_URL . 'user/usercomments/'.$member->username; ?>">
+			Comments <span>(<?php echo $user_comments_count; ?>)</span>
+		</a> 
+		<!-- <a href="#">Comment	Posted <span>(18)</span></a> -->
+	</div>
+</div>
+<div class="ups_leftside_row">
+	<div class="ups_article_counts">
+		<a href="<?php echo HOME_URL . 'user/followers/'.$member->username; ?>">
+			Followers <span id="follower_count">(<?php echo (int)$followerCount;?>)</span>
+		</a>
+		<a href="<?php echo HOME_URL . 'user/followed/'.$member->username; ?>">
+			Following <span id="followed_count">(<?php echo (int)$followedCount;?>)</span>
+		</a>
+	</div>
+</div>
+
+<?php 
+if(!$this->zfcUserIdentity())
+{ 
+   	?>
+	<div class="btn_row">
+		<input type="button" value="Follow" class="yellow_btn" onclick="window.location.href='<?php echo HOME_URL.'user/login?redirect='.HOME_URL.'user/'.$member->username?>'"/>
+	</div>
+	<div class="btn_row">
+		<input type="button" value="Send Message" class="yellow_btn" onclick="window.location.href='<?php echo HOME_URL.'user/login?redirect='.HOME_URL.'user/'.$member->username?>'"/>
+	</div>
+   	<?php
+}
+else
+{
+  	?>
+	<div class="btn_row">
+		<input type="button" value="Un-Follow" id="un_follow_btn" rel="<?php echo $member->user_id; ?>" class="yellow_btn" style="<?php echo ($followed_status)?'display: block':'display:none'?>" />
+		<input type="button" value="Follow" id="follow_btn" rel="<?php echo $member->user_id; ?>" class="yellow_btn" style="<?php echo (!$followed_status)?'display: block':'display:none'?>"/>
+	</div>
+	<div class="btn_row">
+		<input type="button" value="Send Message" class="yellow_btn" id="send_msg_btn" />
+	</div>
+   	<?php
+}
+?>
+<div class="dnone">
+	<div id="send_msg_form">
+    
+            <div class="edit_lightbox">
+            <form action="<?php echo $this->url('frontsearch', array('action' => 'send'));?>" method="post" id="send_msg_form_tag">
+                <div class="edit_lightbox_left">
+                <div class="user_edit_lightbox_row">
+                <input type="hidden" value="" name="msg_id">			
+				<input type="hidden" value="<?php echo $member->user_id;?>" name="to">			
+				<label for="sub">Subject</label><input type="text" value="" id="sub" name="sub" class="">
+				</div>
+                <div class="user_edit_lightbox_row">
+				<label for="msg">Message</label>
+                <textarea id="msg" name="msg" class=""></textarea>
+				</div>
+                </div>
+                <div class="edit_lightbox_right">
+                
+                <div class="btn_section">
+				<input type="button" name="send_form_btn" id="send_form_btn" value="Send" />
+                </div>
+             
+                </div>
+			</form>
+            
+			<div id="send_msg_return_msg"></div>
+		</div>
+	</div>
+</div>

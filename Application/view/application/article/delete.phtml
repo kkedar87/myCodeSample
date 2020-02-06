@@ -1,0 +1,30 @@
+<div class="page_heading_div two_column">
+	<div style="margin: 10px">
+		<?php
+		$title = 'Delete Article: '.$article->title;
+		$this->headTitle($title);
+		?>
+		
+		<h1><?php echo 'Delete Article'; ?></h1>
+	
+		<p style="padding-left: 50px">
+			<strong>Are you sure that you want to delete the following Article?</strong>
+			<br>
+			<span class="clr_orange"><?php echo $this->escapeHtml($article->title); ?> </span>
+			<br />
+		</p>
+		<?php
+		$url = $this->url('frontarticles', array(
+		    'action' => 'delete',
+		    'article_id'     => $this->article_id,
+		));
+		?>
+		<form action="<?php echo $url; ?>" method="post">
+			<div style="margin: 0px 0px 20px 20px">
+			    <input type="hidden" name="article_id" value="<?php echo (int) $article->article_id; ?>" />
+			    <input type="submit" name="del" value="Yes" class="delete_save" />
+			    <input type="submit" name="del" value="No" class="delete_save" />
+			</div>
+		</form>
+	</div>
+</div>

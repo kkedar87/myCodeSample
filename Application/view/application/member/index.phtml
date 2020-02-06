@@ -1,0 +1,105 @@
+<div class="user_portfolio_section">
+	<?php
+	$memeber_name = ($member->display_name == '')?$member->username:$member->display_name;
+	?>
+    <div class="user_profile_section">
+		<div class="ups_leftside">
+			<?php 
+				echo $this->partial('application/partials/portfolio_left_column.phtml', 
+					array(
+						'member' 				=> $member,
+        				'user_articles_count' 	=> $user_articles_count,
+						'user_blogs_count' 		=> $user_blogs_count,
+						)
+				); 
+			?>
+		</div>
+		<div class="ups_rightside">
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>About</h5>
+					<!-- <div class="ups_edit">
+						<a href="#">&nbsp;</a>
+					</div> -->
+				</div>
+				<p><?php echo ($member->about == '')?'Currently, No infomation added about the user.':$member->about; ?></p>
+			</div>
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Company</h5>
+					<!-- <div class="ups_edit">
+						<a href="#">&nbsp;</a>
+					</div> -->
+				</div>
+				<p><?php echo ($member->company == '')?'Currently, No company profile added.':$member->company; ?></p>
+			</div>
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Articles</h5>
+					<?php 
+					if($user_articles_count > 5)
+					{
+						?>
+						<a href="<?php echo HOME_URL . 'articles/all/user/'.$member->username; ?>" class="fright"> more &gt;&gt;</a>
+						<?php
+					}
+					?>
+				</div>
+				<div>
+					<ul>
+						<?php 
+						if(count($blogs) <= 0)
+						{
+							?>
+							<li>No article posted by the user.</li>
+							<?php
+						}
+						$count = 0;
+						foreach($articles as $article)
+						{
+							$count++;
+							?>
+							<li><?php echo $count . ". " . $article->title;?> <span style="float: right;"><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($article->date_created);?> ago</span></li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="ups_rightside_row">
+				<div class="ups_rightside_head">
+					<h5>Blog Posts</h5>
+					<?php 
+					if($user_blogs_count > 5)
+					{
+						?>
+						<a href="<?php echo HOME_URL . 'blogs/all/user/'.$member->username; ?>" class="fright"> more &gt;&gt;</a>
+						<?php
+					}
+					?>
+				</div>
+				<div>
+					<ul>
+						<?php 
+						if(count($blogs) <= 0)
+						{
+							?>
+							<li>No blog posted by the user.</li>
+							<?php
+						}
+						$count = 0;
+						foreach($blogs as $blog)
+						{
+							$count++;
+							?>
+							<li><?php echo $count . ". " . $blog->title;?> <span style="float: right;"><i class="fa fa-clock-o"></i> &nbsp;<?php echo $this->getPastTimeFormat($blog->date_created);?> ago</span></li>
+							<?php
+						}
+						?>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

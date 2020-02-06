@@ -1,0 +1,192 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<?php echo $this->headTitle('8Edge'. $this->translate(' '))->setSeparator(' - ')->setAutoEscape(false) ?>
+ 	
+    	<?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <?php
+        if(isset($meta_keywords))
+        {
+        	?>
+        	<meta name="keywords" content="<?php echo $meta_keywords; ?>">
+        	<?php 
+        }
+        if(isset($meta_description))
+        {
+        	?>
+        	<meta name="description" content="<?php echo $meta_description; ?>">
+        	<?php 
+        }
+        ?>
+        <script> var HOME_URL = '<?php echo HOME_URL;?>';</script>
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'front/image/vnd.microsoft.icon', 'href' => $this->basePath() . '/front/img/favicon.ico'))
+                        ->prependStylesheet($this->basePath() . '/front/vendor/colorbox/colorbox.css')
+                        ->prependStylesheet($this->basePath() . '/front/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/front/css/bootstrap.css')
+                        //->prependStylesheet($this->basePath() . '/front/css/bootstrap.min.css') ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/front/vendor/colorbox/jquery.colorbox.js')
+            ->prependFile($this->basePath() . '/front/js/script.js')
+            ->prependFile($this->basePath() . '/front/js/bootstrap.min.js')
+            ->prependFile($this->basePath() . '/front/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/front/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/front/js/jquery.min.js')
+        ; ?>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+	</head>
+    <body>
+    	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    	<!-- Include all compiled plugins (below), or include individual files as needed -->
+    	<header class="navbar  navbar-fixed-top whiteBG" id="top" role="banner">
+    		<div class="container">
+        		<div class="navbar-header">
+      				<!--
+      				<button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        				<span class="sr-only">Toggle navigation</span>
+        				<span class="fa fa-tasks icon-bar"></span>
+      				</button>-->
+          			<a href="<?php echo HOME_URL;?>" class="navbar-brand"></a>
+        		</div>
+        		<div class="search_div">
+		      		<form id="search_form" class="search_box" autocomplete="off">
+				    	<div id="search_div" style="position:relative">
+					    	<input type="text" placeholder="Enter ticker, author, keyword" id="s" name="s">
+					    	<div id="search_suggestions" class="dnone">
+					    	</div>
+				    	</div>
+				    	
+				    	<span style="cursor:pointer" onclick="$('#search_form').submit()" class="glyphicon glyphicon-search"></span>
+				    </form>
+		    	</div>
+        		<nav class="collapse1 navbar-collapse bs-navbar-collapse" role="navigation">
+        			<ul class="nav navbar-nav navbar-right">
+            			<li><a href="<?php echo HOME_URL?>" ><i class="fa fa-home"></i> Home</a></li>
+            			<?php /*?><li><a href="<?php echo HOME_URL?>info/about-us" ><i class="fa fa-users"></i> About Us</a></li><?php */?>
+            			<!-- <li><a href="<?php echo HOME_URL?>" ><i class="fa fa-user"></i> Top News</a></li> -->
+            			<li><a href="<?php echo HOME_URL?>articles" ><i class="fa fa-pencil"></i> Articles</a></li>
+            			<?php /*?><li><a href="<?php echo HOME_URL?>blogs" ><i class="fa fa-pencil"></i> Blog Posts</a></li><?php */?>
+                        
+            			<?php 
+            			if(!$this->zfcUserIdentity())
+            			{ 
+            				?>
+            				<li><a href="<?php echo $this->url('zfcuser/login')?>"><i class="fa fa-lock"></i> Login/Register</a></li>
+            				<?php /*?><li><a href="<?php echo HOME_URL?>register" class="login_popup_outer"><i class="fa fa-key"></i> Register_popup</a></li> <?php */?>
+            				<?php
+            			}
+            			else
+            			{
+            				$user_id = $this->zfcUserIdentity()->getId();
+            				?>
+            				<li>
+            					<a href="<?php echo HOME_URL?>user">
+								<i class="fa fa-user"></i>
+            					<?php echo ucwords(($this->zfcUserIdentity()->getDisplayname() == '')?$this->zfcUserIdentity()->getUsername():$this->zfcUserIdentity()->getDisplayname());?>
+            					</a>
+            					<ul>
+            						<li>
+			                        	<a href="<?php echo HOME_URL?>user" ><i class="fa fa-user"></i>Profile</a>
+			                        	<ul>
+				                        	<li>
+					                        	<a href="<?php echo $this->url('frontarticles', array('action' => 'mine'))?>" ><i class="fa fa-pencil-square-o"></i> Manage Articles</a>
+					                        </li>
+		            						<li>
+					                        	<a href="<?php echo $this->url('frontblogs', array('action' => 'mine'))?>" ><i class="fa fa-calendar"></i> Manage Blogs</a>
+					                        </li>
+					                        <?php 
+					                        if($this->zfcUserIdentity()->getRole() == 'editor')
+					                        {
+						                        ?>
+						                        <li>
+						                        	<a href="<?php echo $this->url('frontarticles', array('action' => 'review'))?>" ><i class="fa fa-pencil-square-o"></i> Review Articles</a>
+						                        </li>
+						                        <?php 
+					                        }
+					                        ?>
+				                        </ul>
+			                        </li>
+			                        <li>
+			                        	<a href="<?php echo $this->url('frontarticles', array('action' => 'add'))?>" ><i class="fa fa-pencil-square-o"></i>Submit Article</a>
+			                        </li>
+			                        <li>
+			                        	<a href="javascript:void(0)"> <i class="fa fa-envelope"></i>Messages</a>
+			                        	<ul>
+					                        <li>
+					                        	<a href="<?php echo $this->url('frontmemeber', array('action' => 'msg', 'keywords' => 'inbox'))?>" ><i class="fa fa-calendar"></i>Inbox</a>
+					                        </li>
+					                        <li>
+					                        	<a href="<?php echo $this->url('frontmemeber', array('action' => 'msg', 'keywords' => 'sent'))?>" ><i class="fa fa-calendar"></i>Sent</a>
+					                        </li>
+				                        </ul>
+			                        </li>
+			                        <li><a href="<?php echo $this->url('zfcuser/logout');?>?redirect=/" ><i class="fa fa-power-off"></i> Logout</a></li>
+			                    </ul>
+			                </li>
+			                <?php 
+			                $user_new_msgs = $this->userMsgCount($user_id, false);
+			                if( $user_new_msgs > 0)
+			                { 
+				                ?>
+				                <li id="newMsgCount">
+				                	<a href="<?php echo $this->url('frontmemeber', array('action' => 'msg', 'keywords' => 'inbox'))?>" > <i class="fa fa-envelope"><span class="circle_red"><?php echo $user_new_msgs;?></span></i>
+				                		New Message 
+				                	</a>
+				                </li>
+            					<?php
+			                }
+							
+							if( $this->zfcUserIdentity()->getRole() == 'admin')
+						   	{
+								?>
+                                <li id="newMsgCount">
+                                    <a href="<?php echo ADMIN_URL; ?>" ><i class="fa fa-cog"></i>
+                                    Admin Panel
+                                    </a>
+                                </li>
+								<?php
+						   	}
+            			}
+            			?>
+          			</ul>
+        		</nav>
+      		</div><!--container-->
+    	</header>
+    	<!--container-->
+    	<div class="container body_container">
+      		<?php echo $this->content; ?>
+    	</div><!--container-->
+    	<footer>
+    		<div class="container whiteBG foot">        		
+            		<div class="foot-main">
+                    <div class="footer_link">
+                    	<ul class="social_links">
+							<li><a href="javascript:void(0)"><div class="twitter"></div></a></li> 
+							<li><a href="javascript:void(0)"><div class="linkedin"></div></a></li>
+							<li><a href="javascript:void(0)"><div class="facebook"></div></a></li>
+							<li><a href="javascript:void(0)"><div class="googleplus"></div></a></li>
+						</ul>
+                    </div>
+					
+					<div class="copyright">
+						<?php echo $this->pageLinks();?>
+						<!--<ul>
+							<li><a href="javascript:void(0)">About Us</a></li>
+							<li><a href="javascript:void(0)">Disclaimer</a></li>
+							<li><a href="javascript:void(0)">Terms of use</a></li>
+							<li><a href="javascript:void(0)">Contact Us</a></li>
+							<li><a href="javascript:void(0)">Copyright &copy; 2014 8Edge</a></li>
+							<li><a href="javascript:void(0)">Site Map</a></li>
+						</ul>-->
+						</div>
+            		</div><!--foot-main-->            	
+        	</div><!--container-->
+    	</footer>
+  	</body>
+</html>

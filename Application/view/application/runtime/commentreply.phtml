@@ -1,0 +1,15 @@
+<div style="margin: 5px;">
+	<label style="margin-bottom: 0px">By: <?php echo $author_name?></label>
+	<div class="comment_date">
+		<strong><i class="fa fa-comments"></i> Replied On: </strong>
+		<?php echo $comment_date;?>
+		<a href="javascript:void(0)" class="report_abuse_box_open" rel='<?php echo $comment_id?>'><i class="fa fa-file-text"></i> Report Abuse!</a>
+		<div id="report_abuse_box_<?php echo $comment_id?>" class="reply_abuse_box">
+			<fieldset>
+				<textarea spellcheck="true" class="report_abuse" id="report_abuse_<?php echo $comment_id?>" name="report_abuse_<?php echo $comment_id?>" cols="" rows=""></textarea>
+			</fieldset>
+			<input class="next_step report_abuse_btn reply" type="button" name="report_abuse_btn_<?php echo $comment_id?>" id="report_abuse_btn_<?php echo $comment_id?>" value="Report" style="float: right; margin-right: 0px;" />
+		</div>
+	</div>
+</div>
+<p class="greyText reply_p" style="margin: 5px; margin-bottom: 15px;"><?php echo nl2br($comment);?></p>

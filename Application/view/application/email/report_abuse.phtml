@@ -1,0 +1,70 @@
+<style>
+.resultTable{ border: 1px solid #1B67B2; font-size: 14px; min-height: 20px; margin-bottom: 20px; width: 560px; padding: 20px; font-family: 'Open Sans', sans-serif; }
+.resultTable h2{ text-align: center; border-bottom: 1px dashed #1264a7; width: 300px; margin: 0 auto; color: #1663A1; }
+.resultTable img{ text-align:center; margin:0 auto; display:block; }
+.resultTable table{width:100%;} 
+.resultTable tbody{	text-align:left;vertical-align:top;} 
+.resultTable .heading{ text-align: left; font-size: 17px; width: 50%; padding: 20px 0; color: #1264a7; }
+.resultTable tbody th,.resultTable tbody td{ padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; color: #777; }
+.resultTable tbody th{font-weight: 600;color: #333}
+</style>
+<div class="resultTable" style=" border: 1px solid #1B67B2; font-size: 14px; min-height: 20px; margin-bottom: 20px; width: 560px; padding: 20px; font-family: 'Open Sans', sans-serif;">
+    <h2 style=" text-align: center; border-bottom: 1px dashed #1264a7; width: 300px; margin: 0 auto; color: #1663A1;">Abuse Report</h2>
+    <table style="width:100%;">
+        <tbody style="text-align:left;vertical-align:top;">
+            <tr>
+                <th style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; font-weight: 600;color: #333">
+                	Article:
+                </th>
+                <td style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; color: #777;">
+                	<a href="<?php echo $article_link; ?>" ><?php echo $article_id . ": " . $article_title; ?></a>
+                </td>
+            </tr>
+            <tr>
+                <th style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; font-weight: 600;color: #333">
+                	From User:
+                </th>
+                <td style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; color: #777;">
+                	<a href="<?php echo $author_link; ?>" ><?php echo $author_name; ?></a>
+                </td>
+            </tr>
+            <?php 
+            if($comment != '')
+            {
+	            ?>
+	            <tr>
+	                <th style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; font-weight: 600;color: #333">
+	                	Comment:
+	                </th>
+	                <td style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; color: #777;">
+	                	<a href="<?php echo $article_link; ?>#comment_listing_box" ><?php echo $comment->comment; ?></a>
+	                </td>
+	            </tr>
+            	<?php 
+            }
+            if($reply != '')
+            {
+            	?>
+            	<tr>
+                	<th style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; font-weight: 600;color: #333">
+	                	Reply:
+	                </th>
+	                <td style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; color: #777;">
+	                	<a href="<?php echo $article_link; ?>#comment_listing_box" ><?php echo $reply->comment; ?></a>
+	                	
+	                </td>
+	            </tr>
+            	<?php
+            }
+            ?>
+            <tr>
+                <th style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; font-weight: 600;color: #333">
+                	Report:
+                </th>
+                <td style="padding: 8px; line-height: 1.428571429; vertical-align: top; border-top: 1px solid #eee; background-color: #f5f5f5; color: #777;">
+                	<?php echo $report; ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

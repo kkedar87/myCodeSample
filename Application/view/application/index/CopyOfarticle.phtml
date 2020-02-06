@@ -1,0 +1,52 @@
+<div class="row layoutSecond">
+	<div class="col-lg-8">
+		<div class="whiteBG well descrpition ">
+			<h4><?php echo $this->escapeHtml($article->title);?></h4>
+			<span class="article_date"><?php echo date('M d, Y H:i', strtotime($article->date_created));?></span>
+			<p class="greyText"><?php echo $article->description;?></p>
+			<div class="article_tags"><strong>Tags: </strong><?php echo trim($article->tickers, ', ');?></div>
+			<div class="article_bottom_links">
+				<?php echo date('M d, Y H:i', strtotime($article->date_created));?>
+				&nbsp;|&nbsp;
+				<a href="#report_abuse">Report Abuse</a>
+				&nbsp;|&nbsp;
+				<a href="#comments">Comment!</a>
+			</div>
+	   </div>
+	   <!-- <div class="whiteBG well descrpition ">
+			<h3>Comments and discussion boards:</h3>
+			<?php
+			foreach($paginator as $comment)
+			{
+				?>
+				<h4>
+					<?php echo $authors[$comment->author_id]?>
+					<div class="comment_date">
+						<strong>Commented On: </strong>
+						<?php echo date('M d, Y H:i', strtotime($article->date_created));?>
+					</div>
+				</h4>
+				<p class="greyText comment_p"><?php echo $comment->comment;?></p>
+				<?php
+			}
+			?>
+	   </div> -->
+	</div><!--col-lg-8-->
+	
+	<div class="col-lg-4">
+	 	<div class="whiteBG well descrpition" id="author_right">
+	 		<h4>Written By: <?php echo $author->first_name." ".$author->last_name?></h4>
+		  	<p>
+		  		<?php 
+		  		if($author->image != '')
+		  		{
+		  			?>
+		  			<img src="<?php echo MEMBER_IMAGE_URL.$author->image;?>" alt=" <?php echo $author->first_name." ".$author->last_name?>" />
+		  			<?php
+		  		}
+		  		?>
+		  		<?php echo $author->about;?>
+		  	</p>
+	 	</div>	
+	 </div><!--row-->
+</div><!--row-->

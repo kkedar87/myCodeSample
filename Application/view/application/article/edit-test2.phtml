@@ -1,0 +1,387 @@
+<?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/front/js/tinymce_script.js')
+            ->prependFile($this->basePath() . '/front/vendor/tinymce/tinymce.min.js')
+            ->prependFile($this->basePath() . '/front/js/add_article.js')
+             ; ?>
+<?php
+	$title = 'Edit Article';
+	$this->headTitle($title);
+	/* echo "<pre>";
+	print_r($article);
+	echo "</pre>"; */
+?>
+<?php
+$categories = $dynamic_options['categories'];
+?>
+<div class="page_heading_div two_column">
+	<div class="wizard-steps">
+		<div class="active-step step1">
+			<a href="javascript:void(0)"><span>1</span> Article Type</a>
+		</div>
+		<div class="step2">
+			<a href="javascript:void(0)"><span>2</span> Write Article</a>
+		</div>
+		<div class="step3">
+			<a href="javascript:void(0)"><span>3</span> Tagging &amp; Disclosure</a>
+		</div>
+		<div class="step4">
+			<a href="javascript:void(0)"><span>4</span> Preview &amp; Submit</a>
+		</div>
+	</div>	
+
+	<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('frontarticles', array('action' => 'edit', 'article_id' => $article->article_id)));
+	$form->prepare();
+	
+	echo $this->form()->openTag($form);
+	?>
+	<input type="hidden" name="article_id" id="article_id" value="<?php echo ($article->article_id); ?>" />
+	<input type="hidden" name="redirect" value="<?php echo $this->url('frontarticles', array('action' => 'mine')); ?>" />
+	<input type="hidden" name="type" id="type" value="<?php echo ($article->type); ?>" />
+	<input type="hidden" name="primary_ticker_val" id="primary_ticker_val" value="<?php echo ($article->primary_ticker); ?>" />
+	<input type="hidden" name="secondary_ticker_val" id="secondary_ticker_val" value="<?php echo ($article->secondary_ticker); ?>" />
+	<input type="hidden" name="step" id="step" value="" />
+	<input type="hidden" name="position_stocks" id="position_stocks" value="<?php echo ($article->position_stocks); ?>" />
+	<section id="step1">
+		<div
+			class="form_inner_div article_radio_choose <?php echo ($this->is_form_submitted)?'none_display':''?>"
+			id="article_radio">
+			<div
+				class="big_radio <?php echo ($form->get('type')->getValue() == '' || $form->get('type')->getValue() == 'article')?'actv':''; ?>">
+				<div class="big_radio_inner"></div>
+			</div>
+			<strong>Article Submission</strong> - Article must be accepted by our
+			editors for publication. Headlines appear on our partner websites.
+		</div>
+		<div
+			class="form_inner_div article_radio_choose <?php echo ($this->is_form_submitted)?'none_display':''?>"
+			id="blog_radio">
+			<div
+				class="big_radio <?php echo ($form->get('type')->getValue() != '' && $form->get('type')->getValue() == 'blog')?'actv':''; ?>">
+				<div class="big_radio_inner"></div>
+			</div>
+			<strong>Blogs</strong> - Your personal blog for anything stock market related. Our editors publish Blog posts instantly without requiring acceptance.
+		</div>
+		<div class="form_inner_div <?php echo ($this->is_form_submitted)?'none_display':''?>" id="radio_submit">
+			<input class="go_to_step2" type="button" name="go_to_step2" id="go_to_step2" value="Continue" style="margin-top: 0px" />
+		</div>
+	</section>
+	<section id="step2" class="dnone">
+		<div class="form_inner_div <?php echo ($this->is_form_submitted)?'':''?>" id="add_form_div">
+			<div class="form_inner_div_left">
+				<fieldset class="dnone">
+					<label>Tickers:</label> 
+					<input type="text" value="<?php echo $article->tickers; ?>" name="tickers" id="tickers" class="input_icon" placeholder="Title" autocomplete="off"/>
+				</fieldset>
+				<fieldset class="title">
+					<label>Title:</label>
+					<!-- <input class="next_step go_to_step3" type="button" name="go_to_step3" id="go_to_step3" value="Save & Go to Next Step" style="float: right" /> 
+					<input class="savedraft save_draft" type="button" name="save_draft" id="save_draft" value="Save Draf" style="float: right" /> -->
+					<input type="text" value="<?php echo stripslashes($article->title); ?>" name="title" maxlength="255" id="title" class="input_icon" placeholder="Title" autocomplete="off" />
+				</fieldset>
+				<fieldset class="bullet">
+					<label>Summary:</label> 
+					<input type="text" value="<?php echo stripslashes($article->bullet1); ?>" maxlength="255" name="bullet1" id="bullet1" class="input_icon" placeholder="Enter summary here (3-5 bullets required)" autocomplete="off" /> 
+					<input type="text" value="<?php echo stripslashes($article->bullet2); ?>" maxlength="255" name="bullet2" id="bullet2" class="input_icon" autocomplete="off" /> 
+					<input type="text" value="<?php echo stripslashes($article->bullet3); ?>" maxlength="255" name="bullet3" id="bullet3" class="input_icon more_bullet_btn" autocomplete="off" />
+					<input type="text" value="<?php echo stripslashes($article->bullet4); ?>" maxlength="255" name="bullet4" id="bullet4" class="input_icon dnone" autocomplete="off" /> 
+					<input type="text" value="<?php echo stripslashes($article->bullet5); ?>" maxlength="255" name="bullet5" id="bullet5" class="input_icon dnone" autocomplete="off" /> 
+					<input type="button" class="add_more_button bullet_more_button"	value="Add Bullet +" autocomplete="off">
+				</fieldset>
+
+				<fieldset>
+					<label>Article:</label> <br>
+					<span id="article_err" class="err_txt dnone">Write Some Text in Article</span>
+					<textarea rows="" cols="" name="description" id="description" class="article_editor" spellcheck="false"><?php echo stripslashes($article->description); ?></textarea>
+				</fieldset>
+				
+				<fieldset >
+					<div style="margin-top: 10px; padding-left: 5px;" id="checked_spelling_div">
+				  		<input type="checkbox" value="yes" id="checked_spelling" name="checked_spelling"> Have you done the spellcheck for this article?
+					</div>
+				</fieldset>
+			</div>
+			<div class="form_inner_div_right">
+				<?php echo $this->partial('application/article/guidelines.phtml'); ?>
+			</div>
+			<div class="clearfix"></div>
+			<input class="savedraft save_draft" type="submit" name="save_draft" id="save_draft" value="Save Draft" />
+			<input class="next_step go_to_step3" type="button" name="go_to_step3" id="go_to_step3" value="Save & Go to Next Step" /> 
+			<?php //echo $this->formSubmit($form->get('submit')); ?>
+		</div>
+	</section>
+	<section id="step3" class="dnone">
+		<div class="form_inner_div" id="add_form_div">
+			<div class="form_inner_div_left">
+				<div class="tragging_outer">
+					<div class="tragging_box">
+						<?php 
+						$tickers 		= explode(', ', trim($article->tickers, ', '));
+						$primary_ticker	= trim($article->primary_ticker, ', ');
+						$secondary_tickers	= explode(', ', trim($article->secondary_ticker, ', '));
+						$excluded_primary = array_diff($tickers, array($primary_ticker));
+						$unselected_secondary = array_diff($excluded_primary, $secondary_tickers);
+						?>
+						<?php 
+						/*$secondary_tickers = explode(', ', trim($article->secondary_ticker, ', '));
+						if($article->secondary_ticker != '' && count($secondary_tickers) > 0)
+						{
+							?>
+							, Includes:
+							<?php
+							$cnt = 0;
+							foreach($secondary_tickers as $secondary_ticker)
+							{
+								echo ($cnt == 0?'':', ');
+								?><a href="<?php echo HOME_URL.'symbol/'.$secondary_ticker;?>"><?php echo $secondary_ticker;?></a><?php
+								$cnt++;
+							}
+						}*/
+						?>
+						<div class="ptr">
+							<h2>Primary ticker</h2>
+							<p>Select a focus ticker only if your article is overwhelmingly about one stock/ETF <span class="tagging_gray">(optional)</span></p>
+							<div id="primary_ticker_row">
+								<div class="ptr_row">
+									<input type="radio" <?php echo ('' == $primary_ticker)?'checked="checked"':'';?> value="" id="primary_ticker_0" name="primary_ticker" />
+									<label>No primary ticker</label>
+								</div>
+								<?php 
+								foreach($tickers as $ticker)
+								{
+									$ticker_key = str_replace('.', '', $ticker);
+									if(in_array($ticker, $secondary_tickers))
+									{
+										continue;
+									}
+									?>
+									<div class="ptr_row">
+										<input type="radio" <?php echo ($ticker == $primary_ticker)?'checked="checked"':'';?> name="primary_ticker" id="primary_ticker_<?php echo $ticker_key?>" value="<?php echo $ticker?>">
+										<label><?php echo $ticker?></label>
+									</div>
+									<?php
+								}
+								?>
+							</div>
+						</div>
+					
+						<div class="ptr">
+							<h2>Secondary ticker(s)</h2>
+							<p>Article must be material for owners of these stocks/ETFs <span class="tagging_gray">(optional)</span></p>
+							<div id="secondary_ticker_row">
+								<div class="ptr_row">
+									<input type="checkbox" <?php echo (empty($unselected_secondary))?'checked="checked"':'';?> value="" id="secondary_ticker_select_all" name="secondary_ticker_select_all">
+									<label>Select All</label>
+								</div>
+								<?php 
+								foreach($excluded_primary as $ticker)
+								{
+									$ticker_key = str_replace('.', '', $ticker);
+									?>
+									<div class="ptr_row">
+										<input type="checkbox" <?php echo (in_array($ticker, $secondary_tickers))?'checked="checked"':'';?> value="<?php echo $ticker?>" id="secondary_ticker_<?php echo $ticker_key?>" name="secondary_ticker[]">
+										<label><?php echo $ticker?></label>
+									</div>
+									<?php
+								}
+								?>
+							</div>
+						</div>
+					
+						<div class="ptr">
+							<h2>Theme tag</h2>
+							<p>Choose the best theme tag (mouseover for descriptions) <span class="tagging_gray">(optional)</span></p>
+							<div class="ptr_row">
+							<input type="radio" name="category" id="category" value="" <?php echo (empty($dynamic_options['article_categories'])?'checked':'')?>><label>None</label>
+							</div>
+						</div>
+						
+						<div class="tbr">
+							<ul>
+								<?php
+								/* echo "<pre>";
+								print_r($dynamic_options[article_categories]);
+								echo "</pre>"; */
+								$cat_count = 0; 
+								foreach($categories as $category)
+								{
+									if($cat_count !=0 && ($cat_count%3 == 0))
+									{
+										echo '</ul></div><div class="tbr"><ul>';
+									}
+									?>
+									<li>
+										<ul>
+											<li>
+												<h3><?php echo $category->name; ?></h3>
+												<ul>
+													<?php 
+													foreach($category->children as $sub_cat)
+													{
+														?>
+														<li><input type="radio" name="category" id="category" <?php echo (in_array($sub_cat->category_id, $dynamic_options['article_categories']))?'checked="checked"':'';?> value="<?php echo $sub_cat->category_id;?>"><label><?php echo $sub_cat->name;?></label></li>
+														<?php 
+													}
+													?>
+												</ul>
+											</li>
+										</ul>
+									</li>
+									<?php
+									$cat_count++;
+								}
+								?>
+							</ul>
+						</div>
+						
+						<div class="ptr">
+							<h2>Disclosure - Positions</h2>
+							<p>Choose the best theme tag (mouseover for descriptions) <span class="tagging_gray">(optional)</span></p>
+							<div class="ptr_row">
+								<input type="radio" <?php echo ($article->position_dislosure == 'no')?'checked="checked"':'';?> name="position_dislosure" id="position_dislosure_no" value="no">
+								<span>The author has no positions in any stocks mentioned, and no plans to initiate any positions within the next 72 hours.
+								</span>
+							</div>
+							
+							<div class="ptr_row">
+								<input type="radio" <?php echo ($article->position_dislosure == 'may')?'checked="checked"':'';?> name="position_dislosure" id="position_dislosure_may" value="may">
+								<span>The author has no positions in any stocks mentioned, but may initiate a
+									<select style="width: 60px; height: 20px;" name="position_types" id="position_types_may" <?php echo ($article->position_dislosure == 'may')?'':'disabled';?>>
+										<option value="long" <?php echo ($article->position_types == 'long' && $article->position_dislosure == 'may')?'selected="selected"':'';?>>Long</option>
+										<option value="short" <?php echo ($article->position_types == 'short' && $article->position_dislosure == 'may')?'selected="selected"':'';?>>Short</option>
+									</select> position in
+									<div style="position: relative; width: 255px; display: inline-block;">
+										<div class="tag_option dnone" id="tag_options_may"></div>
+										<input type="text" value="<?php echo ($article->position_dislosure == 'may')?$article->position_stocks:'';?>" style="width: 250px; height: 20px;" name="position_stocks_may" id="position_stocks_may" <?php echo ($article->position_dislosure == 'may')?'':'disabled';?>>
+									</div>
+									over the next 72 hours.
+								</span>
+							</div>
+							<div class="ptr_row">
+								<input type="radio" <?php echo ($article->position_dislosure == 'yes')?'checked="checked"':'';?> name="position_dislosure" id="position_dislosure_yes" value="yes">
+								<span>The author is
+									<select style="width: 60px; height: 20px;" name="position_types" id="position_types_yes" <?php echo ($article->position_dislosure == 'yes')?'':'disabled';?>>
+										<option value="long" <?php echo ($article->position_types == 'long' && $article->position_dislosure == 'may')?'selected="selected"':'';?>>Long</option>
+										<option value="short" <?php echo ($article->position_types == 'short' && $article->position_dislosure == 'yes')?'selected="selected"':'';?>>Short</option>
+									</select>
+									<div style="position: relative; width: 255px; display: inline-block;">
+										<div class="tag_option dnone" id="tag_options_yes"></div>
+										<input type="text" value="<?php echo ($article->position_dislosure == 'yes')?$article->position_stocks:'';?>" style="width: 250px; height: 20px;" name="position_stocks_yes" id="position_stocks_yes" <?php echo ($article->position_dislosure == 'yes')?'':'disabled';?>>
+									</div>
+									over the next 72 hours.
+								</span>
+							</div>
+						
+							<div class="ptr_row">
+								<p>If you have any other information you believe is relevant to your disclosure, please include it here:.</p>
+								<textarea name="position_other_info" id="position_other_info" style="height: 70px"><?php echo $article->position_other_info;?></textarea>
+							</div>
+						
+						</div>
+						
+						<div class="ptr">
+							<h2>Disclosure - Business Relationships</h2>
+							<div class="ptr_row">
+								<input type="radio" <?php echo ($article->business_rel_disclosure == 'own')?'checked="checked"':'';?> name="business_rel_disclosure" id="business_rel_disclosure_own" value="own" checked="checked">
+								<span>The author wrote this article themselves, and it expresses their own opinions. The author is not receiving compensation for it (other than from 8Edge). The author has no business relationship with any company whose stock is mentioned in this article.
+								</span>
+							</div>
+						
+							<div class="ptr_row">
+								<input type="radio" <?php echo ($article->business_rel_disclosure == 'not_own')?'checked="checked"':'';?> name="business_rel_disclosure" id="business_rel_disclosure_not_own" value="not_own">
+								<span>This article was written by a third party, and/or the author is receiving compensation to write this article, or has a business relationship with a company whose stock is mentioned in this article.
+								</span>
+							</div>
+							<div class="ptr_row <?php echo ($article->business_rel_disclosure == 'not_own')?'':'dnone';?>">
+								<p>Please specify:</p>
+								<textarea name="business_rel_not_own_specify" id="business_rel_not_own_specify" style="height: 70px"><?php echo ($article->business_rel_disclosure == 'not_own')?$article->business_rel_not_own_specify:'';?></textarea>
+							</div>
+							
+							<div class="ptr_row">
+								<input class="savedraft save_draft" type="submit" name="save_draft" id="save_draft" value="Save Draft" />
+								<input class="go_to_step4 next_step" type="button" name="go_to_step4" id="go_to_step4" value="Preview & Submit" style="margin-top: 0px" />
+							</div>
+							<div class="ptr_row prt_footer">
+							<p>If you experiencing any technical difficulties submitting an article, please send a copy of the article with brief explanation and full disclosure to <a href="mailto: submissions@8edge.co">submissions@8edge.co</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form_inner_div_right">
+				<?php echo $this->partial('application/article/guidelines.phtml'); ?>
+			</div>
+			<div class="clearfix"></div>
+	    	<?php //echo $this->formSubmit($form->get('submit')); ?>
+	    	
+		</div>
+	</section>
+	<section id="step4" class="dnone">
+		<div class="submit_article" style="margin: 0 auto 0 10%; border: 1px solid #ddd; float: left;">
+			<div class="submit_article_row">
+				<div class="sar1"><label>Article type:</label></div>
+				<div class="sar2"><p id="preview_article_type">Premium article</p></div>
+				<div class="sar3"></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Title:</label></div>
+				<div class="sar2"><p id="preview_title">Loren ipsum</p></div>
+				<div class="sar3"><span class="edit go_to_step2">Edit</span></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Focus ticker:</label></div>
+				<div class="sar2"><p id="preview_primary_ticker">COH</p></div>
+				<div class="sar3"><span class="edit go_to_step3">Edit</span></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Secondary ticker(s):</label></div>
+				<div class="sar2"><p id="preview_secondary_ticker">HSBC</p></div>
+				<div class="sar3"><span class="edit go_to_step3">Edit</span></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Theme tag:</label></div>
+				<div class="sar2"><p id="preview_category">Long Ideas</p></div>
+				<div class="sar3"><span class="edit go_to_step3">Edit</span></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Disclosure:</label></div>
+				<div class="sar2"><p id="preview_disclosure">The author has no positions in any stocks mentioned, but may initiate a short position in GOOG over the next 72 hours. The author wrote this article themselves, and it expresses their own opinions. The author is not receiving compensation for it (other than from 8Edge). The author has no business relationship with any company whose stock is mentioned in this article.</p></div>
+				<div class="sar3"><span class="edit go_to_step3">Edit</span></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Your Site URL:</label></div>
+				<div class="sar2"><input type="text" name="user_site_url" id="user_site_url" value="<?php echo $article->user_site_url;?>"></div>
+				<div class="sar3"></div>
+			</div>
+			
+			<div class="submit_article_row">
+				<div class="sar1"><label>Your Site Name:</label></div>
+				<div class="sar2"><input type="text" name="user_site_name" id="user_site_name" value="<?php echo $article->user_site_name;?>"></div>
+				<div class="sar3"></div>
+			</div>
+		</div>
+		<div class="submit_article_row" style="margin-top: 20px;border: 1px solid #DDD;padding: 0px">
+			<div class="sar1" style="background: #EEE; width: 100%; border-bottom: 1px solid #DDD; padding-right: 0px">
+				Preview: 
+				<input class="next_step" type="button" onclick="go_to_step2_fun(true, true)" id="" value="Edit" style="margin-top: 0px; float: right; margin-right: 0px;" />
+			</div>
+			<iframe src="" frameborder="0" id="article_preview_frame" width="100%" scrolling="no" style=" padding-top: 10px"></iframe>
+		</div>
+		<div class="submit_article_row" style="margin-top: 20px; border: medium none; padding: 0px;">
+			<input class="next_step" type="submit" id="submit_article_btn" name="submit_article_btn" value="Submit" />
+		</div>
+	</section>
+	<?php echo $this->form()->closeTag(); ?>
+</div>
+<script>
+$(document).ready(function (){
+	setTimeout(function () { go_to_step2_fun(true, true);}, 100);
+});
+</script>

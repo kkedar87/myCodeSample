@@ -1,0 +1,63 @@
+<div class="user_portfolio_section">
+	<?php
+	$memeber_name = ($member->display_name == '')?$member->username:$member->display_name;
+	?>
+	
+    <div class="user_profile_section">
+		<div class="ups_leftside">
+			<?php 
+				echo $this->partial('application/partials/portfolio_left_column.phtml', 
+					array(
+						'member' 				=> $member,
+        				'user_articles_count' 	=> $user_articles_count,
+						'user_blogs_count'		=> $user_blogs_count,
+						'user_comments_count'	=> $user_comments_count,
+						'followed_status'		=> $followed_status,
+						'followerCount'			=> $followerCount,
+						'followedCount'			=> $followedCount,
+						)
+				); 
+			?>
+		</div>
+		<div class="ups_rightside">
+			<div class="row-fluid padding-allsides">
+            <div class="followers_list">
+            <h1><?php echo $page_title?></h1>
+            <ul>
+				<?php
+				foreach($paginator as $user)
+				{
+					$user_image = ($user->image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$user->image;
+					?>
+					<li>
+						<a href="<?php echo HOME_URL.'user/'.$user->username;?>">
+							<div class="feture-description">
+								<span class="user-name"><label><?php echo $this->userDisplayName($user);?></label></span>
+							</div>
+						</a>
+					</li>
+					<?php
+				}
+				?>
+                </ul>
+                </div>
+			</div>
+			<?php
+			// add at the end of the file after the table
+			echo $this->paginationControl(
+			// the paginator object
+			$this->paginator,
+		    // the scrolling style
+		    'sliding',
+		    // the partial to use to render the control
+		    array('application/partials/paginator.phtml', 'article'),
+			    // the route to link to when a user clicks a control link
+			    array(
+			    	'route' => 'frontarticles',
+					'action'=> 'all/',
+			    )
+			);
+			?>
+		</div>
+	</div>
+</div>

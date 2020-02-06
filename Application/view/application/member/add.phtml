@@ -1,0 +1,33 @@
+<div class="page_heading_div">
+	<?php
+		$title = 'Register Yourself';
+		$this->headTitle($title);
+	?>
+	<h1><?php echo $this->escapeHtml($title); ?></h1>
+	<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('frontregister'));
+	$form->prepare();
+	
+	echo $this->form()->openTag($form);
+	?>
+	
+	<div class="form_inner_div">
+		<?php echo $this->formRow($form->get('first_name')); ?>
+		<br>
+		<?php echo $this->formRow($form->get('last_name')); ?>
+		<br>
+		<?php echo $this->formRow($form->get('email')); ?>
+		<br>
+		<?php echo $this->formRow($form->get('password')); ?>
+		<br>
+		<?php echo $this->formRow($form->get('confirm_password')); ?>
+		<br>
+		<?php echo $this->formRow($form->get('role')); ?>
+	</div>
+	<div class="clearfix"></div>
+	
+	<?php echo $this->formSubmit($form->get('submit')); ?>
+	<?php echo $this->form()->closeTag(); ?>
+	<br>
+</div>

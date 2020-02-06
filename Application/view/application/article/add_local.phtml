@@ -1,0 +1,172 @@
+<?php echo $this->headScript()
+            ->prependFile($this->basePath() . '/front/js/tinymce_script.js')
+            ->prependFile($this->basePath() . '/front/vendor/tinymce/tinymce.min.js')
+             ; ?>
+<div class="page_heading_div two_column">
+	<?php
+		$title = 'Submit an Article';
+		$this->headTitle($title);
+	?>
+	<h1><?php echo $this->escapeHtml($title); ?></h1>
+	
+	<?php
+	$form = $this->form;
+	$form->setAttribute('action', $this->url('frontarticles', array('action' => 'add')));
+	$form->prepare();
+	
+	echo $this->form()->openTag($form);
+	?>
+	<input type="hidden" name="redirect" value="<?php echo $this->url('frontarticles', array('action' => 'mine')); ?>" />
+	<section id="step1">
+		<div class="form_inner_div article_radio_choose <?php echo ($this->is_form_submitted)?'none_display':''?>" id="article_radio">
+			<div class="big_radio <?php echo ($form->get('type')->getValue() == '' || $form->get('type')->getValue() == 'article')?'actv':''; ?>"><div class="big_radio_inner"></div></div>
+			<strong>Article Submission</strong> - Article must be accepted by our editors for publication. Headlines appear on our partner websites.
+		</div>
+		<div class="form_inner_div article_radio_choose <?php echo ($this->is_form_submitted)?'none_display':''?>" id="blog_radio">
+			<div class="big_radio <?php echo ($form->get('type')->getValue() != '' && $form->get('type')->getValue() == 'blog')?'actv':''; ?>"><div class="big_radio_inner"></div></div><strong>Blog Post</strong> - Your personal blog for anything stock market related. Blog posts are published instantly without requiring acceptance by our editors. Instablog headlines don't appear on partner sites.
+		</div>
+		<div class="form_inner_div <?php echo ($this->is_form_submitted)?'none_display':''?>" id="radio_submit">
+			<input type="button" name="select_article_type" id="submitbutton" value="Click to continue" style="margin-top: 0px" />
+		</div>
+	</section>
+	<section id="step2">
+		<div class="form_inner_div <?php echo ($this->is_form_submitted)?'':'dnone'?>" id="add_form_div">
+	    	<div class="form_inner_div_left">
+	    		<input type="button" value="go to 3" onclick="go_to_3()"/>
+				<fieldset class="dnone">
+					<label>Tickers:</label>
+					<input type="text" name="tickers" id="tickers" class="input_icon" placeholder="Title"/>
+				</fieldset>
+				<fieldset class="title">
+					<label>Title:</label>
+					<input type="text" name="title" maxlength="255" id="title" class="input_icon" placeholder="Title"/>
+					<div id="tip_mobile" class="tip_title" style="top: -26px; display: none;">Mobile<div class="down_arw"></div></div>
+				</fieldset>
+				<fieldset class="bullet">
+					<label>Summary:</label>
+					<input type="text" maxlength="255" name="bullet1" id="bullet1" class="input_icon" placeholder="Enter summary here (3-5 bullets required)"/>
+					<input type="text" maxlength="255" name="bullet2" id="bullet2" class="input_icon"/>
+					<input type="text" maxlength="255" name="bullet3" id="bullet3" class="input_icon more_bullet_btn"/>
+					<input type="text" maxlength="255" name="bullet4" id="bullet4" class="input_icon dnone"/>
+					<input type="text" maxlength="255" name="bullet5" id="bullet5" class="input_icon dnone"/>
+					<input type="button" class="add_more_button bullet_more_button" value="Add Bullet +">
+				</fieldset>
+				
+				<fieldset>
+					<label>Article:</label>
+					<br>
+					<textarea rows="" cols="" name="description" id="description" class="article_editor" spellcheck="false"></textarea>
+				</fieldset>
+			</div>
+			<div class="form_inner_div_right">
+				<h1 class="guidelines_heading">Guidelines</h1>
+				<div class="guide_lines" id="guide_lines" style="">
+                <h1>Title:</h1>
+                <ul>
+                  <li>Try to express succinctly and impactfully the article's key thrust. Why should readers care?</li>
+                  <li>Use statements, not questions - unless you plan to leave the question unanswered.</li>
+                  <li>Sensationalistic/bombastic titles may be rejected.</li>
+                  <li>If your article is overwhelmingly about one stock (=focus ticker), mention it (or a key product etc.) in the title.</li>
+                  <li>Do not include ticker symbols in titles.</li>
+                </ul>
+                <h1>Summary:</h1>
+                <ul>
+                  <li>Summaries are mandatory and allow the reader to easily grasp your thesis and key points.</li>
+                  <li>A minimum of 3 bullets and maximum of 5 are allowed for all articles. </li>
+                  <li>Each bullet cannot exceed 30 words and cannot contain any special formatting. See <a target="_blank" href="http://static.cdn-seekingalpha.com/uploads/2014/3/3/summary_example.png">here</a> for examples.</li>
+                  <li>In bulleted summaries, use the company name or the ticker (e.g. "Google" or "GOOG"), but not both. Continue to use "Google (GOOG)" on the first mention of a stock within the article.</li>
+                </ul>
+                <h1>Article:</h1>
+                <ul>
+                  <li>Please proofread carefully!</li>
+                  <li>Hyperlink to all source material.</li>
+                  <li>Link only once; multiple links to the same URL will be deleted.</li>
+                  <li>Keep anchor text brief (6 words or less).</li>
+                  <li>Link no more than 3 times to previous articles you've written.</li>
+                  <li>The first mention of a stock/ETF should be followed by its ticker ("Google (GOOG)"). U.S. tickers only.</li>
+                  <li>Stocks/ETFs must be mentioned and tickered in the article if you want the headline to appear on their quote pages.</li>
+                  <li>Please include a "variant view." It makes you look more balanced (and smarter!).</li>
+                </ul>
+              </div>
+	    	</div>
+	    	<div class="clearfix"></div>
+	    	<?php echo $this->formSubmit($form->get('submit')); ?>
+	    	<input type="button" id="go_choose_article_type" class="submitbutton" value="Back to Choose Type" />
+		</div>
+	</section>
+	<section id="step3">
+		<div class="form_inner_div" id="add_form_div">
+	    	<div class="form_inner_div_left">
+	    		<input type="button" value="go to 3" onclick="go_to_3()"/>
+				<fieldset class="title">
+					<label>Primary Ticker:</label>
+					<ul>
+						<li>
+							<input type="radio" name="primary_ticker" value="" /> No primary ticker
+							<input type="radio" name="primary_ticker" value="0005.hk" /> 0005.HK
+						</li>
+					</ul>
+					
+				</fieldset>
+				<fieldset class="title">
+					<label>Title:</label>
+					<input type="text" name="title" maxlength="255" id="title" class="input_icon" placeholder="Title"/>
+					<div id="tip_mobile" class="tip_title" style="top: -26px; display: none;">Mobile<div class="down_arw"></div></div>
+				</fieldset>
+				<fieldset class="bullet">
+					<label>Summary:</label>
+					<input type="text" maxlength="255" name="bullet1" id="bullet1" class="input_icon" placeholder="Enter summary here (3-5 bullets required)"/>
+					<input type="text" maxlength="255" name="bullet2" id="bullet2" class="input_icon"/>
+					<input type="text" maxlength="255" name="bullet3" id="bullet3" class="input_icon more_bullet_btn"/>
+					<input type="text" maxlength="255" name="bullet4" id="bullet4" class="input_icon dnone"/>
+					<input type="text" maxlength="255" name="bullet5" id="bullet5" class="input_icon dnone"/>
+					<input type="button" class="add_more_button bullet_more_button" value="Add Bullet +">
+				</fieldset>
+				
+				<fieldset>
+					<label>Article:</label>
+					<br>
+					<textarea rows="" cols="" name="description" id="description" class="article_editor" spellcheck="false"></textarea>
+				</fieldset>
+			</div>
+			<div class="form_inner_div_right">
+				<h1 class="guidelines_heading">Guidelines</h1>
+				<div class="guide_lines" id="guide_lines" style="">
+                <h1>Title:</h1>
+                <ul>
+                  <li>Try to express succinctly and impactfully the article's key thrust. Why should readers care?</li>
+                  <li>Use statements, not questions - unless you plan to leave the question unanswered.</li>
+                  <li>Sensationalistic/bombastic titles may be rejected.</li>
+                  <li>If your article is overwhelmingly about one stock (=focus ticker), mention it (or a key product etc.) in the title.</li>
+                  <li>Do not include ticker symbols in titles.</li>
+                </ul>
+                <h1>Summary:</h1>
+                <ul>
+                  <li>Summaries are mandatory and allow the reader to easily grasp your thesis and key points.</li>
+                  <li>A minimum of 3 bullets and maximum of 5 are allowed for all articles. </li>
+                  <li>Each bullet cannot exceed 30 words and cannot contain any special formatting. See <a target="_blank" href="http://static.cdn-seekingalpha.com/uploads/2014/3/3/summary_example.png">here</a> for examples.</li>
+                  <li>In bulleted summaries, use the company name or the ticker (e.g. "Google" or "GOOG"), but not both. Continue to use "Google (GOOG)" on the first mention of a stock within the article.</li>
+                </ul>
+                <h1>Article:</h1>
+                <ul>
+                  <li>Please proofread carefully!</li>
+                  <li>Hyperlink to all source material.</li>
+                  <li>Link only once; multiple links to the same URL will be deleted.</li>
+                  <li>Keep anchor text brief (6 words or less).</li>
+                  <li>Link no more than 3 times to previous articles you've written.</li>
+                  <li>The first mention of a stock/ETF should be followed by its ticker ("Google (GOOG)"). U.S. tickers only.</li>
+                  <li>Stocks/ETFs must be mentioned and tickered in the article if you want the headline to appear on their quote pages.</li>
+                  <li>Please include a "variant view." It makes you look more balanced (and smarter!).</li>
+                </ul>
+              </div>
+	    	</div>
+	    	<div class="clearfix"></div>
+	    	<?php echo $this->formSubmit($form->get('submit')); ?>
+	    	<input type="button" id="go_choose_article_type" class="submitbutton" value="Back to Choose Type" />
+		</div>
+	</section>
+	<section id="step4">
+	
+	</section>
+	<?php echo $this->form()->closeTag(); ?>
+</div>

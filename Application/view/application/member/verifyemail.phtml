@@ -1,0 +1,22 @@
+
+<div class="thankyou_wrapper">
+<div class="thankyou_page">
+<div class="thankyou_body_section" id="verify">
+	<?php 
+	if($link_expired || $invalid_code || !$verification)
+	{
+		?>
+		<div class="form_inner_div">This verification link seems expired. Please click on the following button to send verification link again.</div>
+		<a id="reverify" class="a_button" href="<?php echo $this->url('frontmemeber', array('action' => 'reverificationmail', 'keywords' => base64_encode($user_id)));?>" >Re-Verify</a>
+		<?php
+	}
+	
+	if($verification)
+	{
+		?>
+		<div class="form_inner_div">Your email is verified successfully. Click on the button below to login.</div>
+		<div class="ddBox"><a id="verify_login" class="a_button" href="<?php echo $this->url('zfcuser/login');?>" >Login</a></div>
+		<?php
+	}
+	?>
+</div></div></div>

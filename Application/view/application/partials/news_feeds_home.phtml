@@ -1,0 +1,52 @@
+<?php 
+$feeds = array();
+
+$content = file_get_contents('http://finance.yahoo.com/rss/topfinstories');
+$x = new \SimpleXmlElement($content);
+foreach($x->channel->item as $entry)
+{
+	if(strstr($entry->link, 'http://'))
+	{
+		$feeds[strtotime($entry->pubDate)] = $entry;
+	}
+}
+
+krsort($feeds);
+
+/* echo "<pre>";
+print_r($feeds);
+echo "</pre>"; */
+
+if(count($feeds) > 0)
+{
+	$feed_count = 0;
+	foreach($feeds as $pub_time => $feed)
+	{
+		$feed_count++;
+		?>
+		<div class="span12">
+		    <div class="month_description">
+				<div class="month_description_img"> <img src="<?php echo IMAGE_URL;?>1409065916_News.png" alt="news"> </div>
+				<div class="month_description_content">
+				<a href="<?php echo $feed->link?>" target="_newTab"><?php echo $feed_count.'. '.$this->getExcerpt($feed->title, 140);?></a>
+				<p><?php echo $this->getExcerpt($feed->description, 160);?></p>
+				<ul class="monthdescription_listing">
+					<li><i class="fa fa-clock-o"></i><?php echo date('d M, Y', $pub_time);?></li>
+				</ul>
+				</div>						
+		    </div>
+		</div>
+		<?php
+	}
+}
+else
+{
+	?>
+	<div class="new_section_row">
+		    <div class="">
+				<p>No News Found Right Now.</p>
+		    </div>
+		</div>
+	<?php
+}
+?>

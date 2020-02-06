@@ -1,0 +1,39 @@
+<?php
+$memeber_name = ($member->display_name == '')?$member->first_name.' '.$member->first_name:$member->display_name;
+$memeber_image = ($member->image == '')?IMAGE_URL.'user_image.png':MEMBER_IMAGE_URL.$member->image;
+$this->headTitle ( $memeber_name );
+?>
+<div class="ups_leftside_row">
+	<div class="ups_image">
+		<img src="<?php echo $memeber_image;?>" alt="user_image">
+		<h5><a href="<?php echo HOME_URL.'portfolio/'.$member->username;?>"><?php echo $memeber_name; ?></a></h5>
+	</div>
+</div>
+<div class="ups_leftside_row">
+	<div class="ups_article_counts">
+		<a href="<?php echo HOME_URL . 'articles/all/user/'.$member->username; ?>">
+			Articles <span>(<?php echo $user_articles_count; ?>)</span>
+		</a> 
+		<a href="<?php echo HOME_URL . 'blogs/all/user/'.$member->username; ?>">
+			Blog Posts <span>(<?php echo $user_blogs_count; ?>)</span>
+		</a> 
+		<a href="<?php echo HOME_URL . 'blogs/all/user/'.$member->username; ?>">
+			Comments <span>(<?php echo $user_comments_count; ?>)</span>
+		</a> 
+		<!-- <a href="#">Comment	Posted <span>(18)</span></a> -->
+	</div>
+</div>
+<div class="ups_leftside_row">
+	<div class="followers">
+		<span>38 </span>Followers
+	</div>
+	<div class="followers">
+		<span>18 </span>Following
+	</div>
+</div>
+<div class="btn_row">
+	<input type="button" value="Follow" class="yellow_btn" />
+</div>
+<div class="btn_row">
+	<input type="button" value="Send Message" class="yellow_btn" />
+</div>
